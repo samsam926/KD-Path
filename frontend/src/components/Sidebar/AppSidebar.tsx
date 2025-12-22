@@ -14,7 +14,9 @@ import { User } from "./User"
 
 const baseItems: Item[] = [
   { icon: Home, title: "Dashboard", path: "/" },
-  { icon: Briefcase, title: "Items", path: "/items" },
+  // { icon: Briefcase, title: "Items", path: "/items" },
+  { icon: Users, title: "View All Patients", path: "/allpatients" },
+  { icon: Users, title: "Patient Trajectory", path: "/trajectory" },
 ]
 
 export function AppSidebar() {
@@ -33,7 +35,7 @@ export function AppSidebar() {
         <Main items={items} />
       </SidebarContent>
       <SidebarFooter>
-        <SidebarAppearance />
+        {/* <SidebarAppearance /> */}
         <User user={currentUser} />
       </SidebarFooter>
     </Sidebar>
