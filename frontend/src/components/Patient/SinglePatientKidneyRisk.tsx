@@ -225,7 +225,7 @@ export function SinglePatientKidneyRisk({
         <Card className="p-4 bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200">
           <div className="flex items-center justify-between mb-2">
             <p className="text-sm font-semibold text-healthcare-primary">
-              2-Year Risk
+              2-Year Risk (MMAI Score)
             </p>
             <AlertTriangle className="h-4 w-4 text-orange-600" />
           </div>
@@ -245,7 +245,7 @@ export function SinglePatientKidneyRisk({
         <Card className="p-4 bg-gradient-to-br from-red-50 to-red-100 border-red-200">
           <div className="flex items-center justify-between mb-2">
             <p className="text-sm font-semibold text-healthcare-primary">
-              5-Year Risk
+              5-Year Risk (MMAI Score)
             </p>
             <AlertTriangle className="h-4 w-4 text-alert-high" />
           </div>

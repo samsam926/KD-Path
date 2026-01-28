@@ -62,22 +62,22 @@ export function Trajectory(): ReactNode {
         <PatientVisitTracking onPatientSelect={setTrajectoryPatientId} />
 
         {/* Clinical Visit History & Trends Chart - Full Width */}
-        <ClinicalVisitHistory patientId={trajectoryPatientId} />
+        <ClinicalVisitHistory patientId={trajectoryPatientId || '67475'} />
 
         {/* Patient eGFR Trajectory by Age - Full Width */}
         <PatientEGFRTrajectory primaryPatientId={trajectoryPatientId} />
 
         {/* Biopsy & Mechanistic Insights - Full Width */}
-        <BiopsyMechanisticInsights patientId={trajectoryPatientId || 'PT010'} />
+        <BiopsyMechanisticInsights patientId={trajectoryPatientId || '67475'} />
 
         {/* Critical Patients Management */}
         {/* <CriticalPatientsSection /> */}
 
         {/* DKD Structural Insights - Full Width */}
-        <DKDStructuralInsights
-          patientId={trajectoryPatientId || 'PT010'}
+        {/* <DKDStructuralInsights
+          patientId={trajectoryPatientId || '67475'}
           isActive={!!trajectoryPatientId}
-        />
+        /> */}
       </div>
     </main>
   )

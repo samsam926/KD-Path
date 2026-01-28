@@ -33,7 +33,7 @@ export function DKDStructuralInsights({
   })
 
   // Mock data - would come from API
-  const hasDKDData = patientId === 'PT010' || patientId === 'PT003'
+  const hasDKDData = patientId === '67475' || patientId === '67475'
 
   if (!isActive || !hasDKDData) {
     return null
@@ -89,7 +89,7 @@ export function DKDStructuralInsights({
       </div>
 
       {/* Biopsy Visualization Section */}
-      <div className="border border-gray-200 rounded-lg p-4 bg-gradient-to-br from-blue-50/30 to-purple-50/30">
+      {false && <div className="border border-gray-200 rounded-lg p-4 bg-gradient-to-br from-blue-50/30 to-purple-50/30">
         <h3 className="font-semibold text-healthcare-primary mb-4 flex items-center gap-2">
           <Layers className="h-5 w-5" />
           Digital Pathology Biopsy Visualization
@@ -271,7 +271,7 @@ export function DKDStructuralInsights({
             </div>
           </div>
         </div>
-      </div>
+      </div>}
 
       {/* Lesion Importance Summary */}
       <div className="grid grid-cols-2 gap-6">

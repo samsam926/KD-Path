@@ -429,14 +429,14 @@ export function ClinicalVisitHistory({ patientId }: PatientVisitTrackingProps) {
             </p>
           </div>
         </div>
-        <Button
+        {/* <Button
           onClick={() => setShowAddVisitDialog(true)}
           size="sm"
           disabled={!currentPatient}
         >
           <Plus className="h-4 w-4 mr-2" />
           Add New Visit
-        </Button>
+        </Button> */}
       </div>
 
       {/* Clinical Visit History & Trends Chart */}

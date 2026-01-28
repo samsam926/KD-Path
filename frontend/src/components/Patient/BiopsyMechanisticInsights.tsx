@@ -9,10 +9,7 @@ import {
   Droplet,
   Heart,
   TrendingDown,
-  TrendingUp,
-  FileText,
   Save,
-  X
 } from 'lucide-react'
 
 interface BiopsyMechanisticInsightsProps {
@@ -57,7 +54,7 @@ export function BiopsyMechanisticInsights({
   >([])
 
   // Mock data - in production, this would come from API based on patientId
-  const hasBiopsyData = patientId === 'PT010' // Only show for demo patient
+  const hasBiopsyData = patientId === '67475' // Only show for demo patient
 
   if (!hasBiopsyData) {
     return (
@@ -85,14 +82,6 @@ export function BiopsyMechanisticInsights({
         </div>
       </Card>
     )
-  }
-
-  const toggleOverlay = (overlay: keyof typeof activeOverlays) => {
-    setActiveOverlays((prev) => ({ ...prev, [overlay]: !prev[overlay] }))
-  }
-
-  const toggleBurden = (burden: keyof typeof expandedBurden) => {
-    setExpandedBurden((prev) => ({ ...prev, [burden]: !prev[burden] }))
   }
 
   const toggleDetail = (key: keyof typeof expandedDetails) => {
@@ -155,7 +144,7 @@ export function BiopsyMechanisticInsights({
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
             }`}
           >
-            Compare Models {comparisonMode.compare ? 'ON' : 'OFF'}
+            Compare Models 
           </button>
           <button
             onClick={() =>
@@ -170,7 +159,7 @@ export function BiopsyMechanisticInsights({
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
             }`}
           >
-            Show Mechanistic Drivers
+            Mechanistic Drivers
           </button>
           <button
             onClick={() =>
@@ -185,7 +174,7 @@ export function BiopsyMechanisticInsights({
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
             }`}
           >
-            Show Intervention Impact
+            Intervention Impact
           </button>
         </div>
       </div>
@@ -457,7 +446,7 @@ export function BiopsyMechanisticInsights({
                 <ChevronRight className="h-4 w-4 text-healthcare-primary" />
               )}
               <span className="font-semibold text-healthcare-primary">
-                A. Mechanistic Drivers (Detailed)
+                A. Mechanistic Drivers 
               </span>
             </div>
           </button>

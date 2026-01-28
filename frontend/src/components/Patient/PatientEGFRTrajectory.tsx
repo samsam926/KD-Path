@@ -211,7 +211,8 @@ export function PatientEGFRTrajectory({
   ) => {
     const predictions = [];
 
-    for (let i = 1; i <= years; i++) {
+    // Start from i = 0 to include the current age as the first prediction point
+    for (let i = 0; i <= years; i++) {
       const futureAge = lastObservedAge + i;
       const predictedEGFR = Math.max(
         5,
@@ -219,8 +220,8 @@ export function PatientEGFRTrajectory({
       );
 
       // Calculate expanding uncertainty bounds
-      // Uncertainty increases with time (year 1: ±5%, year 10: ±25%)
-      const uncertaintyPercent = 0.05 + (i / years) * 0.2;
+      // Uncertainty increases with time (year 0: ±3%, year 10: ±25%)
+      const uncertaintyPercent = i === 0 ? 0.03 : 0.05 + (i / years) * 0.2;
       const uncertaintyLower = Math.max(
         0,
         predictedEGFR * (1 - uncertaintyPercent),
@@ -309,18 +310,17 @@ export function PatientEGFRTrajectory({
       const lastVisit = sortedVisits[sortedVisits.length - 1];
       if (!lastVisit.EGFR) return;
 
-      const visitDate = new Date(lastVisit.visitDate);
+      // Use patient's actual current age for starting scenarios
       const now = new Date();
       const patientBirthYear = now.getFullYear() - patient.age;
-      const lastObservedAge =
-        visitDate.getFullYear() - patientBirthYear;
+      const currentAge = now.getFullYear() - patientBirthYear;
 
       if (showScenarios) {
-        // Generate predictions for each scenario
+        // Generate predictions for each scenario starting from current age
         selectedScenarios.forEach((scenario) => {
           const declineRate = SCENARIO_DECLINE_RATES[scenario];
           const predictions = generatePredictions(
-            lastObservedAge,
+            currentAge,
             lastVisit.EGFR,
             declineRate,
             predictionYears,
@@ -348,9 +348,9 @@ export function PatientEGFRTrajectory({
           });
         });
       } else {
-        // Generate single prediction using CKD decline rate
+        // Generate single prediction using CKD decline rate starting from current age
         const predictions = generatePredictions(
-          lastObservedAge,
+          currentAge,
           lastVisit.EGFR,
           SCENARIO_DECLINE_RATES.ckd,
           predictionYears,
@@ -431,7 +431,7 @@ export function PatientEGFRTrajectory({
             observed.uncertaintyUpper;
         }
 
-        // Get scenario predictions
+        // Get scenario predictions (only from lastObservedAge forward)
         selectedScenarios.forEach((scenario) => {
           const scenarioKey = `${patient.id}_${scenario}`;
           const scenarioData =
@@ -440,7 +440,14 @@ export function PatientEGFRTrajectory({
             (d) => d.age === age,
           );
 
-          if (ageData) {
+          // Only show scenario data from present age forward
+          const lastObserved = Math.max(
+            ...chartData.filter(
+              (d) => d.isObserved && d.patientId === patient.id,
+            ).map((d) => d.age),
+          );
+
+          if (ageData && age >= lastObserved) {
             dataPoint[scenarioKey] = ageData.eGFR;
             dataPoint[`${scenarioKey}_lower`] =
               ageData.uncertaintyLower;
@@ -471,14 +478,23 @@ export function PatientEGFRTrajectory({
     return dataPoint;
   });
 
-  // Find the transition age (last observed age) for reference line
-  const lastObservedAge = Math.max(
-    ...chartData.filter((d) => d.isObserved).map((d) => d.age),
-  );
+  // Calculate current age for "Present" reference line
+  // Use the actual current age of the patient, not the last visit age
+  const getCurrentAge = (patient: any) => {
+    const now = new Date();
+    const patientBirthYear = now.getFullYear() - patient.age;
+    return now.getFullYear() - patientBirthYear;
+  };
+
+  // Find the current age (present) - use the first selected patient's current age
+  const lastObservedAge = selectedPatients.length > 0 
+    ? getCurrentAge(selectedPatients[0])
+    : Math.max(
+        ...chartData.filter((d) => d.isObserved).map((d) => d.age),
+      );
 
   return (
     <Card className="p-6">
-      {console.log("Selected Patients:", mergedChartData)}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <div className="p-2 bg-healthcare-secondary/10 rounded-lg">
@@ -847,7 +863,7 @@ export function PatientEGFRTrajectory({
           </Popover>
 
           {/* Add Patient Button */}
-          {(
+          {false && (
             <Popover>
               <PopoverTrigger asChild>
                 <Button
@@ -1151,6 +1167,11 @@ export function PatientEGFRTrajectory({
                   formatter={(value: number, name: string) => {
                     if (typeof value !== "number") return null;
 
+                    // Filter out uncertainty band data keys
+                    if (name.includes("_upper") || name.includes("_lower") || name.includes("_isPredicted") || name.includes("_date")) {
+                      return null;
+                    }
+
                     // Handle scenario names
                     if (name.includes("_")) {
                       const parts = name.split("_");
@@ -1206,9 +1227,9 @@ export function PatientEGFRTrajectory({
 
                 {/* Render uncertainty bands and lines based on mode */}
                 {showScenarios ? (
-                  // SCENARIO MODE: Render observed + scenario predictions
+                  // SCENARIO MODE: Render observed + scenario predictions (scenarios start from present)
                   <>
-                    {/* Uncertainty bands for scenarios */}
+                    {/* Uncertainty bands for scenarios - only from present forward */}
                     {selectedPatients.map(
                       (patient, patientIndex) =>
                         selectedScenarios.map((scenario) => {
@@ -1225,6 +1246,7 @@ export function PatientEGFRTrajectory({
                                 fillOpacity={0.2}
                                 connectNulls
                                 stackId={scenarioKey}
+                                legendType="none"
                               />
                               <Area
                                 type="monotone"
@@ -1234,6 +1256,7 @@ export function PatientEGFRTrajectory({
                                 fillOpacity={1}
                                 connectNulls
                                 stackId={scenarioKey}
+                                legendType="none"
                               />
                             </React.Fragment>
                           );
@@ -1259,6 +1282,7 @@ export function PatientEGFRTrajectory({
                             fillOpacity={0.1}
                             connectNulls
                             stackId={`${patient.id}_observed`}
+                            legendType="none"
                           />
                           <Area
                             type="monotone"
@@ -1268,12 +1292,13 @@ export function PatientEGFRTrajectory({
                             fillOpacity={1}
                             connectNulls
                             stackId={`${patient.id}_observed`}
+                            legendType="none"
                           />
                         </React.Fragment>
                       ),
                     )}
 
-                    {/* Scenario prediction lines (dashed) */}
+                    {/* Scenario prediction lines (dashed) - only from present forward */}
                     {selectedPatients.map(
                       (patient, patientIndex) =>
                         selectedScenarios.map((scenario) => {
@@ -1343,6 +1368,7 @@ export function PatientEGFRTrajectory({
                           fillOpacity={0.2}
                           connectNulls
                           stackId={patient.id}
+                          legendType="none"
                         />
                         <Area
                           type="monotone"
@@ -1352,6 +1378,7 @@ export function PatientEGFRTrajectory({
                           fillOpacity={1}
                           connectNulls
                           stackId={patient.id}
+                          legendType="none"
                         />
                       </React.Fragment>
                     ))}
