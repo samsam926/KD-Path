@@ -1,26 +1,25 @@
-import { Card } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'
-import { AlertTriangle, Clock } from 'lucide-react'
-import { cn } from '@/components/ui/utils'
-import { usePatients } from '@/contexts/PatientContext'
+import { AlertTriangle, Clock } from "lucide-react"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Badge } from "@/components/ui/badge"
+import { Card } from "@/components/ui/card"
+import { cn } from "@/components/ui/utils"
+import { usePatients } from "@/contexts/PatientContext"
 
 const getSeverityColor = (status?: string) => {
   switch (status) {
-    case 'Fast Progression CKD':
-    case 'FastCKD uncertainty':
-      return 'bg-alert-high text-white'
-    case 'CKD':
-      return 'bg-alert-medium text-white'
-    case 'CKD uncertainty':
-      return 'bg-[#FBBF24] text-white'
-    case 'Healthy':
-      return 'bg-alert-low text-white'
-    case 'Healthy uncertainty':
-      return 'bg-[#6EE7B7] text-white'
+    case "Fast Progression CKD":
+    case "FastCKD uncertainty":
+      return "bg-alert-high text-white"
+    case "CKD":
+      return "bg-alert-medium text-white"
+    case "CKD uncertainty":
+      return "bg-[#FBBF24] text-white"
+    case "Healthy":
+      return "bg-alert-low text-white"
+    case "Healthy uncertainty":
+      return "bg-[#6EE7B7] text-white"
     default:
-      return 'bg-muted text-foreground'
+      return "bg-muted text-foreground"
   }
 }
 
@@ -30,17 +29,17 @@ export function HighAlertPatients() {
   // Get critical CKD patients
   const criticalPatients = patients.filter(
     (p) =>
-      p.status === 'CKD' ||
-      p.status === 'Fast Progression CKD' ||
-      p.status === 'FastCKD uncertainty'
+      p.status === "CKD" ||
+      p.status === "Fast Progression CKD" ||
+      p.status === "FastCKD uncertainty",
   )
 
   // Function to get initials from name
   const getInitials = (name: string) => {
     return name
-      .split(' ')
+      .split(" ")
       .map((n) => n[0])
-      .join('')
+      .join("")
       .toUpperCase()
   }
 
@@ -70,8 +69,8 @@ export function HighAlertPatients() {
             <div
               key={patient.id}
               className={cn(
-                'border rounded-lg p-4 transition-colors hover:bg-muted/30',
-                index === 0 ? 'border-alert-high' : 'border-border'
+                "border rounded-lg p-4 transition-colors hover:bg-muted/30",
+                index === 0 ? "border-alert-high" : "border-border",
               )}
             >
               <div className="flex items-start gap-3">
@@ -92,8 +91,8 @@ export function HighAlertPatients() {
                     <Badge
                       variant="secondary"
                       className={cn(
-                        'text-xs',
-                        getSeverityColor(patient.status)
+                        "text-xs",
+                        getSeverityColor(patient.status),
                       )}
                     >
                       {patient.status?.toUpperCase()}
@@ -114,8 +113,8 @@ export function HighAlertPatients() {
                           className={cn(
                             patient.vitals.heartRate > 100 ||
                               patient.vitals.heartRate < 60
-                              ? 'text-alert-high'
-                              : 'text-alert-low'
+                              ? "text-alert-high"
+                              : "text-alert-low",
                           )}
                         >
                           {patient.vitals.heartRate}
@@ -129,8 +128,8 @@ export function HighAlertPatients() {
                           className={cn(
                             patient.vitals.bloodPressureSys > 140 ||
                               patient.vitals.bloodPressureSys < 90
-                              ? 'text-alert-high'
-                              : 'text-muted-foreground'
+                              ? "text-alert-high"
+                              : "text-muted-foreground",
                           )}
                         >
                           {patient.vitals.bloodPressureSys}/
@@ -144,8 +143,8 @@ export function HighAlertPatients() {
                         <div
                           className={cn(
                             patient.vitals.oxygenSat < 95
-                              ? 'text-alert-high'
-                              : 'text-alert-low'
+                              ? "text-alert-high"
+                              : "text-alert-low",
                           )}
                         >
                           {patient.vitals.oxygenSat}%

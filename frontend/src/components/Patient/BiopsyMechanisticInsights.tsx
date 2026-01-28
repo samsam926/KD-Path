@@ -1,36 +1,36 @@
-import { Card } from '@/components/ui/card'
-import { useState } from 'react'
 import {
+  Activity,
   ChevronDown,
   ChevronRight,
-  Info,
-  Activity,
-  Microscope,
   Droplet,
   Heart,
-  TrendingDown,
+  Info,
+  Microscope,
   Save,
-} from 'lucide-react'
+  TrendingDown,
+} from "lucide-react"
+import { useState } from "react"
+import { Card } from "@/components/ui/card"
 
 interface BiopsyMechanisticInsightsProps {
   patientId: string
 }
 
 export function BiopsyMechanisticInsights({
-  patientId
+  patientId,
 }: BiopsyMechanisticInsightsProps) {
-  const [activeOverlays, setActiveOverlays] = useState({
+  const [_activeOverlays, _setActiveOverlays] = useState({
     glomeruli: true,
     tubules: false,
     arteries: false,
     morphometric: false,
-    molecular: false
+    molecular: false,
   })
 
-  const [expandedBurden, setExpandedBurden] = useState({
+  const [_expandedBurden, _setExpandedBurden] = useState({
     morphometric: false,
     molecular: false,
-    clinical: false
+    clinical: false,
   })
 
   const [expandedDetails, setExpandedDetails] = useState({
@@ -38,23 +38,23 @@ export function BiopsyMechanisticInsights({
     burden: false,
     modifiable: false,
     inputs: false,
-    notes: false
+    notes: false,
   })
 
   const [comparisonMode, setComparisonMode] = useState({
     compare: false,
     showDrivers: false,
-    showIntervention: false
+    showIntervention: false,
   })
 
-  const [showNotePanel, setShowNotePanel] = useState(false)
-  const [noteText, setNoteText] = useState('')
+  const [_showNotePanel, setShowNotePanel] = useState(false)
+  const [noteText, setNoteText] = useState("")
   const [savedNotes, setSavedNotes] = useState<
     Array<{ text: string; timestamp: string }>
   >([])
 
   // Mock data - in production, this would come from API based on patientId
-  const hasBiopsyData = patientId === '67475' // Only show for demo patient
+  const hasBiopsyData = patientId === "67475" // Only show for demo patient
 
   if (!hasBiopsyData) {
     return (
@@ -92,16 +92,16 @@ export function BiopsyMechanisticInsights({
     if (noteText.trim()) {
       const newNote = {
         text: noteText,
-        timestamp: new Date().toLocaleString('en-US', {
-          month: 'short',
-          day: 'numeric',
-          year: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit'
-        })
+        timestamp: new Date().toLocaleString("en-US", {
+          month: "short",
+          day: "numeric",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
       }
       setSavedNotes((prev) => [newNote, ...prev])
-      setNoteText('')
+      setNoteText("")
       setShowNotePanel(false)
     }
   }
@@ -135,28 +135,28 @@ export function BiopsyMechanisticInsights({
             onClick={() =>
               setComparisonMode({
                 ...comparisonMode,
-                compare: !comparisonMode.compare
+                compare: !comparisonMode.compare,
               })
             }
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
               comparisonMode.compare
-                ? 'bg-healthcare-primary text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                ? "bg-healthcare-primary text-white"
+                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
             }`}
           >
-            Compare Models 
+            Compare Models
           </button>
           <button
             onClick={() =>
               setComparisonMode({
                 ...comparisonMode,
-                showDrivers: !comparisonMode.showDrivers
+                showDrivers: !comparisonMode.showDrivers,
               })
             }
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
               comparisonMode.showDrivers
-                ? 'bg-healthcare-primary text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                ? "bg-healthcare-primary text-white"
+                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
             }`}
           >
             Mechanistic Drivers
@@ -165,13 +165,13 @@ export function BiopsyMechanisticInsights({
             onClick={() =>
               setComparisonMode({
                 ...comparisonMode,
-                showIntervention: !comparisonMode.showIntervention
+                showIntervention: !comparisonMode.showIntervention,
               })
             }
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
               comparisonMode.showIntervention
-                ? 'bg-healthcare-primary text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                ? "bg-healthcare-primary text-white"
+                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
             }`}
           >
             Intervention Impact
@@ -254,11 +254,11 @@ export function BiopsyMechanisticInsights({
               </p>
               <div className="space-y-1">
                 {[
-                  { label: 'Diabetes', value: 24 },
-                  { label: 'Hypertension', value: 18 },
-                  { label: 'Immune', value: 16 },
-                  { label: 'Hypoxia', value: 22 },
-                  { label: 'Tubular injury', value: 20 }
+                  { label: "Diabetes", value: 24 },
+                  { label: "Hypertension", value: 18 },
+                  { label: "Immune", value: 16 },
+                  { label: "Hypoxia", value: 22 },
+                  { label: "Tubular injury", value: 20 },
                 ].map((driver) => (
                   <div key={driver.label} className="flex items-center gap-2">
                     <div className="flex-1 bg-gray-200 rounded-full h-1.5">
@@ -316,11 +316,11 @@ export function BiopsyMechanisticInsights({
               </p>
               <ul className="space-y-1">
                 {[
-                  'BP optimization (<130/80)',
-                  'Proteinuria reduction',
-                  'Glucose control (HbA1c <7%)',
-                  'Minimize med toxicity',
-                  'Volume/sodium mgmt'
+                  "BP optimization (<130/80)",
+                  "Proteinuria reduction",
+                  "Glucose control (HbA1c <7%)",
+                  "Minimize med toxicity",
+                  "Volume/sodium mgmt",
                 ].map((intervention, idx) => (
                   <li
                     key={idx}
@@ -343,50 +343,50 @@ export function BiopsyMechanisticInsights({
       <div className="grid grid-cols-3 gap-4">
         {[
           {
-            title: 'Glomerular Vectors',
+            title: "Glomerular Vectors",
             icon: Droplet,
-            color: 'bg-gray-100 border-gray-200',
+            color: "bg-gray-100 border-gray-200",
             morphometric: [
-              'Glomerular volume ↑ (142%)',
-              'Mesangial expansion ↑ (168%)',
-              'Podocyte density ↓ (62%)'
+              "Glomerular volume ↑ (142%)",
+              "Mesangial expansion ↑ (168%)",
+              "Podocyte density ↓ (62%)",
             ],
             omics: [
-              'VEGF signaling ↑',
-              'TGF-β pathway ↑',
-              'Inflammatory markers ↑'
-            ]
+              "VEGF signaling ↑",
+              "TGF-β pathway ↑",
+              "Inflammatory markers ↑",
+            ],
           },
           {
-            title: 'Tubular Vectors',
+            title: "Tubular Vectors",
             icon: Activity,
-            color: 'bg-gray-100 border-gray-200',
+            color: "bg-gray-100 border-gray-200",
             morphometric: [
-              'Tubular atrophy ↑ (134%)',
-              'Brush border loss ↑ (156%)',
-              'Tubular diameter ↓ (78%)'
+              "Tubular atrophy ↑ (134%)",
+              "Brush border loss ↑ (156%)",
+              "Tubular diameter ↓ (78%)",
             ],
             omics: [
-              'Hypoxia markers ↑',
-              'Fibrosis genes ↑',
-              'Metabolic stress ↑'
-            ]
+              "Hypoxia markers ↑",
+              "Fibrosis genes ↑",
+              "Metabolic stress ↑",
+            ],
           },
           {
-            title: 'Arteriolar Vectors',
+            title: "Arteriolar Vectors",
             icon: Heart,
-            color: 'bg-gray-100 border-gray-200',
+            color: "bg-gray-100 border-gray-200",
             morphometric: [
-              'Arterial wall thickness ↑ (124%)',
-              'Lumen narrowing ↑ (112%)',
-              'Arteriolar sclerosis ↑ (145%)'
+              "Arterial wall thickness ↑ (124%)",
+              "Lumen narrowing ↑ (112%)",
+              "Arteriolar sclerosis ↑ (145%)",
             ],
             omics: [
-              'Platelet activation ↑',
-              'Endothelial dysfunction ↑',
-              'Oxidative stress ↑'
-            ]
-          }
+              "Platelet activation ↑",
+              "Endothelial dysfunction ↑",
+              "Oxidative stress ↑",
+            ],
+          },
         ].map((compartment) => (
           <div
             key={compartment.title}
@@ -436,7 +436,7 @@ export function BiopsyMechanisticInsights({
         {/* A. Mechanistic Drivers */}
         <div className="border border-gray-200 rounded-lg">
           <button
-            onClick={() => toggleDetail('drivers')}
+            onClick={() => toggleDetail("drivers")}
             className="w-full flex items-center justify-between p-4 hover:bg-gray-50 transition-colors"
           >
             <div className="flex items-center gap-2">
@@ -446,7 +446,7 @@ export function BiopsyMechanisticInsights({
                 <ChevronRight className="h-4 w-4 text-healthcare-primary" />
               )}
               <span className="font-semibold text-healthcare-primary">
-                A. Mechanistic Drivers 
+                A. Mechanistic Drivers
               </span>
             </div>
           </button>
@@ -455,32 +455,32 @@ export function BiopsyMechanisticInsights({
               <div className="space-y-4 grid grid-cols-3 gap-4">
                 {[
                   {
-                    category: 'Morphometric',
+                    category: "Morphometric",
                     items: [
-                      { label: 'Glomerular sclerosis', value: 28 },
-                      { label: 'Tubular atrophy', value: 24 },
-                      { label: 'Interstitial fibrosis', value: 22 },
-                      { label: 'Arteriolar hyalinosis', value: 18 }
-                    ]
+                      { label: "Glomerular sclerosis", value: 28 },
+                      { label: "Tubular atrophy", value: 24 },
+                      { label: "Interstitial fibrosis", value: 22 },
+                      { label: "Arteriolar hyalinosis", value: 18 },
+                    ],
                   },
                   {
-                    category: 'Molecular',
+                    category: "Molecular",
                     items: [
-                      { label: 'Inflammatory pathways', value: 26 },
-                      { label: 'Fibrotic signatures', value: 24 },
-                      { label: 'Hypoxia markers', value: 22 },
-                      { label: 'Oxidative stress', value: 20 }
-                    ]
+                      { label: "Inflammatory pathways", value: 26 },
+                      { label: "Fibrotic signatures", value: 24 },
+                      { label: "Hypoxia markers", value: 22 },
+                      { label: "Oxidative stress", value: 20 },
+                    ],
                   },
                   {
-                    category: 'Clinical',
+                    category: "Clinical",
                     items: [
-                      { label: 'eGFR decline rate', value: 32 },
-                      { label: 'Proteinuria severity', value: 28 },
-                      { label: 'BP dysregulation', value: 24 },
-                      { label: 'Glycemic control', value: 16 }
-                    ]
-                  }
+                      { label: "eGFR decline rate", value: 32 },
+                      { label: "Proteinuria severity", value: 28 },
+                      { label: "BP dysregulation", value: 24 },
+                      { label: "Glycemic control", value: 16 },
+                    ],
+                  },
                 ].map((section) => (
                   <div key={section.category}>
                     <h5 className="text-sm font-semibold text-gray-700 mb-2">
@@ -515,7 +515,7 @@ export function BiopsyMechanisticInsights({
         {/* B. Burden Analysis */}
         <div className="border border-gray-200 rounded-lg">
           <button
-            onClick={() => toggleDetail('burden')}
+            onClick={() => toggleDetail("burden")}
             className="w-full flex items-center justify-between p-4 hover:bg-gray-50 transition-colors"
           >
             <div className="flex items-center gap-2">
@@ -534,30 +534,30 @@ export function BiopsyMechanisticInsights({
               <div className="space-y-4 grid grid-cols-3 gap-4">
                 {[
                   {
-                    category: 'Morphometric',
+                    category: "Morphometric",
                     items: [
-                      { label: 'Glomerular Burden', value: 28 },
-                      { label: 'Tubular Burden', value: 24 },
-                      { label: 'Interstitial Burden', value: 22 },
-                      { label: 'Arteriolar Burden', value: 18 }
-                    ]
+                      { label: "Glomerular Burden", value: 28 },
+                      { label: "Tubular Burden", value: 24 },
+                      { label: "Interstitial Burden", value: 22 },
+                      { label: "Arteriolar Burden", value: 18 },
+                    ],
                   },
                   {
-                    category: 'Molecular',
+                    category: "Molecular",
                     items: [
-                      { label: 'Angiogenesis', value: 26 },
-                      { label: 'Cellular Injury/Response', value: 24 },
-                      { label: 'Hypoxia Signatures', value: 22 }
-                    ]
+                      { label: "Angiogenesis", value: 26 },
+                      { label: "Cellular Injury/Response", value: 24 },
+                      { label: "Hypoxia Signatures", value: 22 },
+                    ],
                   },
                   {
-                    category: 'Clinical',
+                    category: "Clinical",
                     items: [
-                      { label: 'eGFR Burden', value: 32 },
-                      { label: 'Proteinuria Burden', value: 28 },
-                      { label: 'BP Burden', value: 24 }
-                    ]
-                  }
+                      { label: "eGFR Burden", value: 32 },
+                      { label: "Proteinuria Burden", value: 28 },
+                      { label: "BP Burden", value: 24 },
+                    ],
+                  },
                 ].map((section) => (
                   <div key={section.category}>
                     <h5 className="text-sm font-semibold text-gray-700 mb-2">
@@ -593,7 +593,7 @@ export function BiopsyMechanisticInsights({
         {/* C. Modifiable Risk Factors */}
         <div className="border border-gray-200 rounded-lg">
           <button
-            onClick={() => toggleDetail('modifiable')}
+            onClick={() => toggleDetail("modifiable")}
             className="w-full flex items-center justify-between p-4 hover:bg-gray-50 transition-colors"
           >
             <div className="flex items-center gap-2">
@@ -616,41 +616,41 @@ export function BiopsyMechanisticInsights({
               <div className="grid grid-cols-3 gap-4">
                 {[
                   {
-                    factor: 'Systolic BP',
-                    current: '148 mmHg',
-                    target: '<130 mmHg',
-                    impact: '↓ 2.8%'
+                    factor: "Systolic BP",
+                    current: "148 mmHg",
+                    target: "<130 mmHg",
+                    impact: "↓ 2.8%",
                   },
                   {
-                    factor: 'Diastolic BP',
-                    current: '92 mmHg',
-                    target: '<80 mmHg',
-                    impact: '↓ 1.4%'
+                    factor: "Diastolic BP",
+                    current: "92 mmHg",
+                    target: "<80 mmHg",
+                    impact: "↓ 1.4%",
                   },
                   {
-                    factor: 'HbA1c',
-                    current: '8.2%',
-                    target: '<7.0%',
-                    impact: '↓ 2.1%'
+                    factor: "HbA1c",
+                    current: "8.2%",
+                    target: "<7.0%",
+                    impact: "↓ 2.1%",
                   },
                   {
-                    factor: 'ACR',
-                    current: '285 mg/g',
-                    target: '<30 mg/g',
-                    impact: '↓ 3.8%'
+                    factor: "ACR",
+                    current: "285 mg/g",
+                    target: "<30 mg/g",
+                    impact: "↓ 3.8%",
                   },
                   {
-                    factor: 'BMI',
-                    current: '32.4',
-                    target: '<30',
-                    impact: '↓ 0.9%'
+                    factor: "BMI",
+                    current: "32.4",
+                    target: "<30",
+                    impact: "↓ 0.9%",
                   },
                   {
-                    factor: 'Na+ intake',
-                    current: '4.2 g/day',
-                    target: '<2.3 g/day',
-                    impact: '↓ 1.2%'
-                  }
+                    factor: "Na+ intake",
+                    current: "4.2 g/day",
+                    target: "<2.3 g/day",
+                    impact: "↓ 1.2%",
+                  },
                 ].map((item) => (
                   <div key={item.factor} className="bg-gray-50 rounded p-3">
                     <div className="flex items-center justify-between mb-1">
@@ -662,14 +662,14 @@ export function BiopsyMechanisticInsights({
                       </span>
                     </div>
                     <div className="text-xs text-gray-600">
-                      Current:{' '}
+                      Current:{" "}
                       <span
                         className="font-semibold"
                         dangerouslySetInnerHTML={{ __html: item.current }}
                       />
                     </div>
                     <div className="text-xs text-gray-600">
-                      Target:{' '}
+                      Target:{" "}
                       <span
                         className="font-semibold text-green-600"
                         dangerouslySetInnerHTML={{ __html: item.target }}
@@ -685,7 +685,7 @@ export function BiopsyMechanisticInsights({
         {/* D. Model Input Summary */}
         <div className="border border-gray-200 rounded-lg">
           <button
-            onClick={() => toggleDetail('inputs')}
+            onClick={() => toggleDetail("inputs")}
             className="w-full flex items-center justify-between p-4 hover:bg-gray-50 transition-colors"
           >
             <div className="flex items-center gap-2">
@@ -720,51 +720,51 @@ export function BiopsyMechanisticInsights({
                 </thead>
                 <tbody className="text-xs">
                   {[
-                    { param: 'eGFR', tangri: '✓', mmai: '✓', post: '✓' },
+                    { param: "eGFR", tangri: "✓", mmai: "✓", post: "✓" },
                     {
-                      param: 'ACR (Proteinuria)',
-                      tangri: '✓',
-                      mmai: '✓',
-                      post: '✓ (optimized)'
+                      param: "ACR (Proteinuria)",
+                      tangri: "✓",
+                      mmai: "✓",
+                      post: "✓ (optimized)",
                     },
-                    { param: 'Age', tangri: '✓', mmai: '✓', post: '✓' },
-                    { param: 'Sex', tangri: '✓', mmai: '✓', post: '✓' },
+                    { param: "Age", tangri: "✓", mmai: "✓", post: "✓" },
+                    { param: "Sex", tangri: "✓", mmai: "✓", post: "✓" },
                     {
-                      param: 'Morphometric features',
-                      tangri: '—',
-                      mmai: '✓',
-                      post: '✓'
-                    },
-                    {
-                      param: 'Molecular signatures',
-                      tangri: '—',
-                      mmai: '✓',
-                      post: '✓'
+                      param: "Morphometric features",
+                      tangri: "—",
+                      mmai: "✓",
+                      post: "✓",
                     },
                     {
-                      param: 'BP control',
-                      tangri: '—',
-                      mmai: '✓',
-                      post: '✓ (optimized)'
+                      param: "Molecular signatures",
+                      tangri: "—",
+                      mmai: "✓",
+                      post: "✓",
                     },
                     {
-                      param: 'Glucose control',
-                      tangri: '—',
-                      mmai: '✓',
-                      post: '✓ (optimized)'
+                      param: "BP control",
+                      tangri: "—",
+                      mmai: "✓",
+                      post: "✓ (optimized)",
                     },
                     {
-                      param: 'Medication toxicity',
-                      tangri: '—',
-                      mmai: '✓',
-                      post: '✓ (minimized)'
+                      param: "Glucose control",
+                      tangri: "—",
+                      mmai: "✓",
+                      post: "✓ (optimized)",
                     },
                     {
-                      param: 'Sodium/volume mgmt',
-                      tangri: '—',
-                      mmai: '✓',
-                      post: '✓ (optimized)'
-                    }
+                      param: "Medication toxicity",
+                      tangri: "—",
+                      mmai: "✓",
+                      post: "✓ (minimized)",
+                    },
+                    {
+                      param: "Sodium/volume mgmt",
+                      tangri: "—",
+                      mmai: "✓",
+                      post: "✓ (optimized)",
+                    },
                   ].map((row, idx) => (
                     <tr key={idx} className="border-b border-gray-100">
                       <td className="py-2 px-3 text-gray-700">{row.param}</td>
@@ -782,7 +782,7 @@ export function BiopsyMechanisticInsights({
         {/* E. Clinical Notes */}
         <div className="border border-gray-200 rounded-lg">
           <button
-            onClick={() => toggleDetail('notes')}
+            onClick={() => toggleDetail("notes")}
             className="w-full flex items-center justify-between p-4 hover:bg-gray-50 transition-colors"
           >
             <div className="flex items-center gap-2">
@@ -797,7 +797,7 @@ export function BiopsyMechanisticInsights({
             </div>
             {savedNotes.length > 0 && (
               <span className="text-xs font-semibold text-healthcare-accent bg-healthcare-accent/10 px-2 py-1 rounded">
-                {savedNotes.length} {savedNotes.length === 1 ? 'note' : 'notes'}
+                {savedNotes.length} {savedNotes.length === 1 ? "note" : "notes"}
               </span>
             )}
           </button>
@@ -816,7 +816,7 @@ export function BiopsyMechanisticInsights({
                 />
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-gray-600">
-                    Patient: {patientId} | Clinician Note |{' '}
+                    Patient: {patientId} | Clinician Note |{" "}
                     {new Date().toLocaleDateString()}
                   </span>
                   <button

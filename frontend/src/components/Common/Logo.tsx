@@ -7,6 +7,7 @@ import iconLight from "/assets/images/fastapi-icon-light.svg"
 // import logo from "/assets/images/fastapi-logo.svg"
 import ckdlogo from "/assets/images/logo_ckd.svg"
 import ckdlogoLight from "/assets/images/logo_ckd.svg"
+
 // import logoLight from "/assets/images/fastapi-logo-light.svg"
 
 interface LogoProps {

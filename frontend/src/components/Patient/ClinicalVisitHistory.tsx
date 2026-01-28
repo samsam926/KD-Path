@@ -1,149 +1,148 @@
-import { useState, useEffect } from 'react'
-import { Card } from '@/components/ui/card'
-import { usePatients, ClinicalVisit } from '@/contexts/PatientContext'
+import { Label } from "@radix-ui/react-label"
+import { Activity, Filter, TrendingDown, TrendingUp } from "lucide-react"
+import { useEffect, useState } from "react"
 import {
-  LineChart,
+  CartesianGrid,
+  Legend,
   Line,
+  LineChart,
+  ReferenceArea,
+  ResponsiveContainer,
+  Tooltip,
   XAxis,
   YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  Legend,
-  ReferenceArea
-} from 'recharts'
-import { TrendingDown, TrendingUp, Activity, Plus, Filter } from 'lucide-react'
-import { Button } from '../ui/button'
-import { AddVisitDialog } from './AddVisitDialog'
+} from "recharts"
+import { toast } from "sonner"
+import { Card } from "@/components/ui/card"
 import {
   Popover,
   PopoverContent,
-  PopoverTrigger
-} from '@/components/ui/popover'
-import { Label } from '@radix-ui/react-label'
-import { Input } from '../ui/input'
-import { toast } from 'sonner'
+  PopoverTrigger,
+} from "@/components/ui/popover"
+import { type ClinicalVisit, usePatients } from "@/contexts/PatientContext"
+import { Button } from "../ui/button"
+import { Input } from "../ui/input"
 
 const clinicalParameters = [
   {
-    key: 'EGFR',
-    label: 'eGFR',
-    unit: 'mL/min/1.73m²',
-    color: '#095256',
-    normalRange: { min: 60, max: 120 }
+    key: "EGFR",
+    label: "eGFR",
+    unit: "mL/min/1.73m²",
+    color: "#095256",
+    normalRange: { min: 60, max: 120 },
   },
   {
-    key: 'BP_SYSTOLIC',
-    label: 'BP Systolic',
-    unit: 'mmHg',
-    color: '#087F8C',
-    normalRange: { min: 90, max: 140 }
+    key: "BP_SYSTOLIC",
+    label: "BP Systolic",
+    unit: "mmHg",
+    color: "#087F8C",
+    normalRange: { min: 90, max: 140 },
   },
   {
-    key: 'BP_DIASTOLIC',
-    label: 'BP Diastolic',
-    unit: 'mmHg',
-    color: '#3F4785',
-    normalRange: { min: 60, max: 90 }
+    key: "BP_DIASTOLIC",
+    label: "BP Diastolic",
+    unit: "mmHg",
+    color: "#3F4785",
+    normalRange: { min: 60, max: 90 },
   },
   {
-    key: 'HBA1C',
-    label: 'HbA1c',
-    unit: '%',
-    color: '#98C1B4',
-    normalRange: { min: 4, max: 5.7 }
+    key: "HBA1C",
+    label: "HbA1c",
+    unit: "%",
+    color: "#98C1B4",
+    normalRange: { min: 4, max: 5.7 },
   },
   {
-    key: 'HEMOGLOBIN',
-    label: 'Hemoglobin',
-    unit: 'g/dL',
-    color: '#B6E3E9',
-    normalRange: { min: 12, max: 17 }
+    key: "HEMOGLOBIN",
+    label: "Hemoglobin",
+    unit: "g/dL",
+    color: "#B6E3E9",
+    normalRange: { min: 12, max: 17 },
   },
   {
-    key: 'ALKALINE_PHOSPHATASE',
-    label: 'Alkaline Phosphatase',
-    unit: 'U/L',
-    color: '#095256',
-    normalRange: { min: 30, max: 120 }
+    key: "ALKALINE_PHOSPHATASE",
+    label: "Alkaline Phosphatase",
+    unit: "U/L",
+    color: "#095256",
+    normalRange: { min: 30, max: 120 },
   },
   {
-    key: 'ALT_SGPT',
-    label: 'ALT (SGPT)',
-    unit: 'U/L',
-    color: '#087F8C',
-    normalRange: { min: 7, max: 56 }
+    key: "ALT_SGPT",
+    label: "ALT (SGPT)",
+    unit: "U/L",
+    color: "#087F8C",
+    normalRange: { min: 7, max: 56 },
   },
   {
-    key: 'AST_SGOT',
-    label: 'AST (SGOT)',
-    unit: 'U/L',
-    color: '#3F4785',
-    normalRange: { min: 10, max: 40 }
+    key: "AST_SGOT",
+    label: "AST (SGOT)",
+    unit: "U/L",
+    color: "#3F4785",
+    normalRange: { min: 10, max: 40 },
   },
   {
-    key: 'CHOLESTEROL',
-    label: 'Total Cholesterol',
-    unit: 'mg/dL',
-    color: '#98C1B4',
-    normalRange: { min: 125, max: 200 }
+    key: "CHOLESTEROL",
+    label: "Total Cholesterol",
+    unit: "mg/dL",
+    color: "#98C1B4",
+    normalRange: { min: 125, max: 200 },
   },
   {
-    key: 'LDL',
-    label: 'LDL Cholesterol',
-    unit: 'mg/dL',
-    color: '#B6E3E9',
-    normalRange: { min: 0, max: 100 }
+    key: "LDL",
+    label: "LDL Cholesterol",
+    unit: "mg/dL",
+    color: "#B6E3E9",
+    normalRange: { min: 0, max: 100 },
   },
   {
-    key: 'HDL',
-    label: 'HDL Cholesterol',
-    unit: 'mg/dL',
-    color: '#095256',
-    normalRange: { min: 40, max: 60 }
+    key: "HDL",
+    label: "HDL Cholesterol",
+    unit: "mg/dL",
+    color: "#095256",
+    normalRange: { min: 40, max: 60 },
   },
   {
-    key: 'TRIGLYCERIDES',
-    label: 'Triglycerides',
-    unit: 'mg/dL',
-    color: '#087F8C',
-    normalRange: { min: 0, max: 150 }
+    key: "TRIGLYCERIDES",
+    label: "Triglycerides",
+    unit: "mg/dL",
+    color: "#087F8C",
+    normalRange: { min: 0, max: 150 },
   },
   {
-    key: 'INR',
-    label: 'INR',
-    unit: '',
-    color: '#3F4785',
-    normalRange: { min: 0.8, max: 1.2 }
+    key: "INR",
+    label: "INR",
+    unit: "",
+    color: "#3F4785",
+    normalRange: { min: 0.8, max: 1.2 },
   },
   {
-    key: 'TBIL',
-    label: 'Total Bilirubin',
-    unit: 'mg/dL',
-    color: '#98C1B4',
-    normalRange: { min: 0.1, max: 1.2 }
+    key: "TBIL",
+    label: "Total Bilirubin",
+    unit: "mg/dL",
+    color: "#98C1B4",
+    normalRange: { min: 0.1, max: 1.2 },
   },
   {
-    key: 'WT',
-    label: 'Weight',
-    unit: 'kg',
-    color: '#B6E3E9',
-    normalRange: { min: 50, max: 100 }
+    key: "WT",
+    label: "Weight",
+    unit: "kg",
+    color: "#B6E3E9",
+    normalRange: { min: 50, max: 100 },
   },
   {
-    key: 'CREATINE_KINASE',
-    label: 'Creatine Kinase',
-    unit: 'U/L',
-    color: '#095256',
-    normalRange: { min: 22, max: 198 }
+    key: "CREATINE_KINASE",
+    label: "Creatine Kinase",
+    unit: "U/L",
+    color: "#095256",
+    normalRange: { min: 22, max: 198 },
   },
   {
-    key: 'TROPONIN',
-    label: 'Troponin',
-    unit: 'ng/L',
-    color: '#087F8C',
-    normalRange: { min: 0, max: 14 }
-  }
+    key: "TROPONIN",
+    label: "Troponin",
+    unit: "ng/L",
+    color: "#087F8C",
+    normalRange: { min: 0, max: 14 },
+  },
 ]
 
 interface PatientVisitTrackingProps {
@@ -152,48 +151,48 @@ interface PatientVisitTrackingProps {
 
 export function ClinicalVisitHistory({ patientId }: PatientVisitTrackingProps) {
   const { patients, getPatient, addVisit } = usePatients()
-  const [selectedPatientId, setSelectedPatientId] = useState<string>('')
-  const [searchInput, setSearchInput] = useState<string>('')
+  const [selectedPatientId, setSelectedPatientId] = useState<string>("")
+  const [searchInput, _setSearchInput] = useState<string>("")
   const [selectedParameters, setSelectedParameters] = useState<string[]>([
-    'EGFR',
-    'BP_SYSTOLIC',
-    'HBA1C'
+    "EGFR",
+    "BP_SYSTOLIC",
+    "HBA1C",
   ])
-  const [showAddVisitDialog, setShowAddVisitDialog] = useState(false)
-  const [newVisitData, setNewVisitData] = useState<Record<string, string>>({})
-  const [open, setOpen] = useState(false)
+  const [_showAddVisitDialog, _setShowAddVisitDialog] = useState(false)
+  const [_newVisitData, _setNewVisitData] = useState<Record<string, string>>({})
+  const [_open, _setOpen] = useState(false)
 
   // Date range filtration state
   const [dateRange, setDateRange] = useState<
-    '3months' | '6months' | '1year' | 'all' | 'custom'
-  >('all')
-  const [customStartDate, setCustomStartDate] = useState<string>('')
-  const [customEndDate, setCustomEndDate] = useState<string>('')
+    "3months" | "6months" | "1year" | "all" | "custom"
+  >("all")
+  const [customStartDate, setCustomStartDate] = useState<string>("")
+  const [customEndDate, setCustomEndDate] = useState<string>("")
   const [filterPopoverOpen, setFilterPopoverOpen] = useState(false)
 
   // View all visits dialog state
-  const [showAllVisitsDialog, setShowAllVisitsDialog] = useState(false)
+  const [_showAllVisitsDialog, _setShowAllVisitsDialog] = useState(false)
 
   // Pagination state
-  const [currentPage, setCurrentPage] = useState(1)
-  const visitsPerPage = 5
+  const [_currentPage, _setCurrentPage] = useState(1)
+  const _visitsPerPage = 5
 
   // Get patients with visit history
   const patientsWithVisits = patients.filter(
-    (p) => p.visits && p.visits.length > 0
+    (p) => p.visits && p.visits.length > 0,
   )
 
   // Default to first patient with visits
   const currentPatientId =
-    patientId || selectedPatientId || patientsWithVisits[0]?.id || ''
+    patientId || selectedPatientId || patientsWithVisits[0]?.id || ""
   const currentPatient = patients.find((p) => p.id === currentPatientId)
   const visits = currentPatient?.visits || []
 
   // Notify parent component when patient changes
-  useEffect(() => {}, [currentPatientId, patientId])
+  useEffect(() => {}, [])
 
   // Handle search from Patient Vitals Monitor
-  const handleSearch = () => {
+  const _handleSearch = () => {
     const upperCaseInput = searchInput.toUpperCase()
     const patient = getPatient(upperCaseInput)
     if (patient) {
@@ -202,23 +201,23 @@ export function ClinicalVisitHistory({ patientId }: PatientVisitTrackingProps) {
         toast.success(`Patient ${patient.name} loaded`)
       }
     } else {
-      toast.error('Patient not found')
+      toast.error("Patient not found")
     }
   }
 
   // Get last visit date
-  const getLastVisitDate = () => {
+  const _getLastVisitDate = () => {
     if (visits.length > 0) {
       return new Date(visits[visits.length - 1].visitDate).toLocaleDateString(
-        'en-US',
+        "en-US",
         {
-          year: 'numeric',
-          month: 'short',
-          day: 'numeric'
-        }
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+        },
       )
     }
-    return 'No visits recorded'
+    return "No visits recorded"
   }
 
   // Mock vitals history data for the vitals chart (simulating time-series data)
@@ -227,78 +226,78 @@ export function ClinicalVisitHistory({ patientId }: PatientVisitTrackingProps) {
 
     return [
       {
-        time: '00:00',
+        time: "00:00",
         ...vitals,
         heartRate: vitals.heartRate - 3,
-        oxygenSat: vitals.oxygenSat - 1
+        oxygenSat: vitals.oxygenSat - 1,
       },
       {
-        time: '04:00',
+        time: "04:00",
         ...vitals,
         heartRate: vitals.heartRate - 5,
-        oxygenSat: vitals.oxygenSat - 2
+        oxygenSat: vitals.oxygenSat - 2,
       },
       {
-        time: '08:00',
+        time: "08:00",
         ...vitals,
         heartRate: vitals.heartRate + 1,
-        oxygenSat: vitals.oxygenSat
+        oxygenSat: vitals.oxygenSat,
       },
       {
-        time: '12:00',
+        time: "12:00",
         ...vitals,
         heartRate: vitals.heartRate + 3,
-        oxygenSat: vitals.oxygenSat + 1
+        oxygenSat: vitals.oxygenSat + 1,
       },
       {
-        time: '16:00',
+        time: "16:00",
         ...vitals,
         heartRate: vitals.heartRate,
-        oxygenSat: vitals.oxygenSat
+        oxygenSat: vitals.oxygenSat,
       },
       {
-        time: '20:00',
+        time: "20:00",
         ...vitals,
         heartRate: vitals.heartRate - 2,
-        oxygenSat: vitals.oxygenSat - 1
-      }
+        oxygenSat: vitals.oxygenSat - 1,
+      },
     ]
   }
 
-  const vitalsData = currentPatient?.vitals
+  const _vitalsData = currentPatient?.vitals
     ? generateVitalsHistory(currentPatient.vitals)
     : []
 
   // Filter visits based on date range
   const getFilteredVisits = () => {
-    if (dateRange === 'all') return visits
+    if (dateRange === "all") return visits
 
     const now = new Date()
     let startDate: Date
 
     switch (dateRange) {
-      case '3months':
+      case "3months":
         startDate = new Date(
           now.getFullYear(),
           now.getMonth() - 3,
-          now.getDate()
+          now.getDate(),
         )
         break
-      case '6months':
+      case "6months":
         startDate = new Date(
           now.getFullYear(),
           now.getMonth() - 6,
-          now.getDate()
+          now.getDate(),
         )
         break
-      case '1year':
+      case "1year":
         startDate = new Date(
           now.getFullYear() - 1,
           now.getMonth(),
-          now.getDate()
+          now.getDate(),
         )
         break
-      case 'custom':
+      case "custom": {
         if (!customStartDate) return visits
         startDate = new Date(customStartDate)
         const endDate = customEndDate ? new Date(customEndDate) : now
@@ -306,6 +305,7 @@ export function ClinicalVisitHistory({ patientId }: PatientVisitTrackingProps) {
           const visitDate = new Date(visit.visitDate)
           return visitDate >= startDate && visitDate <= endDate
         })
+      }
       default:
         return visits
     }
@@ -321,18 +321,18 @@ export function ClinicalVisitHistory({ patientId }: PatientVisitTrackingProps) {
     const visitDate = new Date(visit.visitDate)
     const today = new Date()
     const daysSinceVisit = Math.floor(
-      (today.getTime() - visitDate.getTime()) / (1000 * 60 * 60 * 24)
+      (today.getTime() - visitDate.getTime()) / (1000 * 60 * 60 * 24),
     )
     const yearsSinceVisit = daysSinceVisit / 365.25
     const ageAtVisit = Math.floor((currentPatient?.age || 0) - yearsSinceVisit)
 
     const dataPoint: any = {
       visitNumber: `V${visit.visitNumber}`,
-      date: new Date(visit.visitDate).toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric'
+      date: new Date(visit.visitDate).toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
       }),
-      ageAtVisit: ageAtVisit
+      ageAtVisit: ageAtVisit,
     }
 
     clinicalParameters.forEach((param) => {
@@ -346,7 +346,7 @@ export function ClinicalVisitHistory({ patientId }: PatientVisitTrackingProps) {
     setSelectedParameters((prev) =>
       prev.includes(paramKey)
         ? prev.filter((p) => p !== paramKey)
-        : [...prev, paramKey]
+        : [...prev, paramKey],
     )
   }
 
@@ -359,8 +359,8 @@ export function ClinicalVisitHistory({ patientId }: PatientVisitTrackingProps) {
     const change = ((current - previous) / previous) * 100
 
     return {
-      direction: change > 0 ? 'up' : 'down',
-      percentage: Math.abs(change).toFixed(1)
+      direction: change > 0 ? "up" : "down",
+      percentage: Math.abs(change).toFixed(1),
     }
   }
 
@@ -461,15 +461,15 @@ export function ClinicalVisitHistory({ patientId }: PatientVisitTrackingProps) {
                     className="border-healthcare-primary/30 hover:bg-healthcare-primary/5 text-xs"
                   >
                     <Filter className="h-3.5 w-3.5 mr-1.5" />
-                    {dateRange === 'all'
-                      ? 'All Time'
-                      : dateRange === '3months'
-                        ? '3 Months'
-                        : dateRange === '6months'
-                          ? '6 Months'
-                          : dateRange === '1year'
-                            ? '1 Year'
-                            : 'Custom'}
+                    {dateRange === "all"
+                      ? "All Time"
+                      : dateRange === "3months"
+                        ? "3 Months"
+                        : dateRange === "6months"
+                          ? "6 Months"
+                          : dateRange === "1year"
+                            ? "1 Year"
+                            : "Custom"}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-80 p-4" align="end">
@@ -486,52 +486,52 @@ export function ClinicalVisitHistory({ patientId }: PatientVisitTrackingProps) {
                     <div className="grid grid-cols-2 gap-2">
                       <button
                         onClick={() => {
-                          setDateRange('3months')
+                          setDateRange("3months")
                           setFilterPopoverOpen(false)
                         }}
                         className={`px-3 py-2 rounded-md text-xs transition-all ${
-                          dateRange === '3months'
-                            ? 'bg-healthcare-primary text-white'
-                            : 'bg-gray-100 hover:bg-gray-200 text-healthcare-primary'
+                          dateRange === "3months"
+                            ? "bg-healthcare-primary text-white"
+                            : "bg-gray-100 hover:bg-gray-200 text-healthcare-primary"
                         }`}
                       >
                         3 Months
                       </button>
                       <button
                         onClick={() => {
-                          setDateRange('6months')
+                          setDateRange("6months")
                           setFilterPopoverOpen(false)
                         }}
                         className={`px-3 py-2 rounded-md text-xs transition-all ${
-                          dateRange === '6months'
-                            ? 'bg-healthcare-primary text-white'
-                            : 'bg-gray-100 hover:bg-gray-200 text-healthcare-primary'
+                          dateRange === "6months"
+                            ? "bg-healthcare-primary text-white"
+                            : "bg-gray-100 hover:bg-gray-200 text-healthcare-primary"
                         }`}
                       >
                         6 Months
                       </button>
                       <button
                         onClick={() => {
-                          setDateRange('1year')
+                          setDateRange("1year")
                           setFilterPopoverOpen(false)
                         }}
                         className={`px-3 py-2 rounded-md text-xs transition-all ${
-                          dateRange === '1year'
-                            ? 'bg-healthcare-primary text-white'
-                            : 'bg-gray-100 hover:bg-gray-200 text-healthcare-primary'
+                          dateRange === "1year"
+                            ? "bg-healthcare-primary text-white"
+                            : "bg-gray-100 hover:bg-gray-200 text-healthcare-primary"
                         }`}
                       >
                         1 Year
                       </button>
                       <button
                         onClick={() => {
-                          setDateRange('all')
+                          setDateRange("all")
                           setFilterPopoverOpen(false)
                         }}
                         className={`px-3 py-2 rounded-md text-xs transition-all ${
-                          dateRange === 'all'
-                            ? 'bg-healthcare-primary text-white'
-                            : 'bg-gray-100 hover:bg-gray-200 text-healthcare-primary'
+                          dateRange === "all"
+                            ? "bg-healthcare-primary text-white"
+                            : "bg-gray-100 hover:bg-gray-200 text-healthcare-primary"
                         }`}
                       >
                         All Time
@@ -540,17 +540,17 @@ export function ClinicalVisitHistory({ patientId }: PatientVisitTrackingProps) {
 
                     <div className="pt-2 border-t">
                       <button
-                        onClick={() => setDateRange('custom')}
+                        onClick={() => setDateRange("custom")}
                         className={`w-full px-3 py-2 rounded-md text-xs transition-all mb-2 ${
-                          dateRange === 'custom'
-                            ? 'bg-healthcare-primary text-white'
-                            : 'bg-gray-100 hover:bg-gray-200 text-healthcare-primary'
+                          dateRange === "custom"
+                            ? "bg-healthcare-primary text-white"
+                            : "bg-gray-100 hover:bg-gray-200 text-healthcare-primary"
                         }`}
                       >
                         Custom Range
                       </button>
 
-                      {dateRange === 'custom' && (
+                      {dateRange === "custom" && (
                         <div className="space-y-2">
                           <div>
                             <Label
@@ -615,14 +615,14 @@ export function ClinicalVisitHistory({ patientId }: PatientVisitTrackingProps) {
                 <p className="font-semibold text-xs">
                   {filteredVisits.length > 0
                     ? new Date(filteredVisits[0].visitDate).toLocaleDateString(
-                        'en-US',
+                        "en-US",
                         {
-                          month: 'short',
-                          day: 'numeric',
-                          year: 'numeric'
-                        }
+                          month: "short",
+                          day: "numeric",
+                          year: "numeric",
+                        },
                       )
-                    : 'N/A'}
+                    : "N/A"}
                 </p>
               </div>
               <div className="text-center bg-white rounded-lg py-2 px-3">
@@ -632,13 +632,13 @@ export function ClinicalVisitHistory({ patientId }: PatientVisitTrackingProps) {
                 <p className="font-semibold text-xs">
                   {filteredVisits.length > 0
                     ? new Date(
-                        filteredVisits[filteredVisits.length - 1].visitDate
-                      ).toLocaleDateString('en-US', {
-                        month: 'short',
-                        day: 'numeric',
-                        year: 'numeric'
+                        filteredVisits[filteredVisits.length - 1].visitDate,
+                      ).toLocaleDateString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                        year: "numeric",
                       })
-                    : 'N/A'}
+                    : "N/A"}
                 </p>
               </div>
               <div className="text-center bg-white rounded-lg py-2 px-3">
@@ -647,14 +647,14 @@ export function ClinicalVisitHistory({ patientId }: PatientVisitTrackingProps) {
                 </p>
                 <p className="font-semibold text-xs">
                   {filteredVisits.length > 0
-                    ? Math.ceil(
+                    ? `${Math.ceil(
                         (new Date(
-                          filteredVisits[filteredVisits.length - 1].visitDate
+                          filteredVisits[filteredVisits.length - 1].visitDate,
                         ).getTime() -
                           new Date(filteredVisits[0].visitDate).getTime()) /
-                          (1000 * 60 * 60 * 24)
-                      ) + ' days'
-                    : 'N/A'}
+                          (1000 * 60 * 60 * 24),
+                      )} days`
+                    : "N/A"}
                 </p>
               </div>
             </div>
@@ -677,8 +677,8 @@ export function ClinicalVisitHistory({ patientId }: PatientVisitTrackingProps) {
                           px-2 py-1 rounded-lg border text-xs transition-all
                           ${
                             isSelected
-                              ? 'bg-healthcare-primary text-white border-healthcare-primary'
-                              : 'bg-white border-gray-200 hover:border-healthcare-primary'
+                              ? "bg-healthcare-primary text-white border-healthcare-primary"
+                              : "bg-white border-gray-200 hover:border-healthcare-primary"
                           }
                         `}
                   >
@@ -686,7 +686,7 @@ export function ClinicalVisitHistory({ patientId }: PatientVisitTrackingProps) {
                       <span>{param.label}</span>
                       {trend && isSelected && (
                         <span className="flex items-center gap-0.5">
-                          {trend.direction === 'up' ? (
+                          {trend.direction === "up" ? (
                             <TrendingUp className="h-2.5 w-2.5" />
                           ) : (
                             <TrendingDown className="h-2.5 w-2.5" />
@@ -708,11 +708,11 @@ export function ClinicalVisitHistory({ patientId }: PatientVisitTrackingProps) {
             <div className="p-6">
               <div className="mb-3 flex flex-wrap gap-2 text-xs hidden">
                 <div className="flex items-center gap-1.5">
-                  <div className="w-4 h-4 bg-green-500/20 border border-green-500/40 rounded"></div>
+                  <div className="w-4 h-4 bg-green-500/20 border border-green-500/40 rounded" />
                   <span className="text-muted-foreground">Normal Range</span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <div className="w-4 h-4 bg-red-500/20 border border-red-500/40 rounded"></div>
+                  <div className="w-4 h-4 bg-red-500/20 border border-red-500/40 rounded" />
                   <span className="text-muted-foreground">Out of Range</span>
                 </div>
               </div>
@@ -728,7 +728,7 @@ export function ClinicalVisitHistory({ patientId }: PatientVisitTrackingProps) {
                     {selectedParameters.length === 1 &&
                       (() => {
                         const param = clinicalParameters.find(
-                          (p) => p.key === selectedParameters[0]
+                          (p) => p.key === selectedParameters[0],
                         )
                         if (!param) return null
 
@@ -789,13 +789,13 @@ export function ClinicalVisitHistory({ patientId }: PatientVisitTrackingProps) {
                       dataKey="date"
                       axisLine={false}
                       tickLine={false}
-                      tick={{ fill: '#095256', fontSize: 11 }}
+                      tick={{ fill: "#095256", fontSize: 11 }}
                       label={{
-                        value: 'Visit Date',
-                        position: 'insideBottom',
+                        value: "Visit Date",
+                        position: "insideBottom",
                         offset: -10,
-                        fill: '#095256',
-                        fontSize: 12
+                        fill: "#095256",
+                        fontSize: 12,
                       }}
                       angle={-45}
                       textAnchor="end"
@@ -804,33 +804,33 @@ export function ClinicalVisitHistory({ patientId }: PatientVisitTrackingProps) {
                     <YAxis
                       axisLine={false}
                       tickLine={false}
-                      tick={{ fill: '#095256', fontSize: 11 }}
+                      tick={{ fill: "#095256", fontSize: 11 }}
                       domain={
                         selectedParameters.length === 1
-                          ? ['auto', 'auto']
+                          ? ["auto", "auto"]
                           : undefined
                       }
                     />
                     <Tooltip
                       contentStyle={{
-                        backgroundColor: 'white',
-                        border: '1px solid #B6E3E9',
-                        borderRadius: '8px',
-                        fontSize: '11px',
-                        padding: '12px'
+                        backgroundColor: "white",
+                        border: "1px solid #B6E3E9",
+                        borderRadius: "8px",
+                        fontSize: "11px",
+                        padding: "12px",
                       }}
                       formatter={(value: number, name: string) => {
                         const param = clinicalParameters.find(
-                          (p) => p.key === name
+                          (p) => p.key === name,
                         )
                         const isNormal =
                           param &&
                           value >= param.normalRange.min &&
                           value <= param.normalRange.max
-                        const status = isNormal ? '✓ Normal' : '⚠ Out of Range'
+                        const status = isNormal ? "✓ Normal" : "⚠ Out of Range"
                         return [
-                          `${value} ${param?.unit || ''} ${status}`,
-                          param?.label || name
+                          `${value} ${param?.unit || ""} ${status}`,
+                          param?.label || name,
                         ]
                       }}
                       labelFormatter={(label, payload) => {
@@ -842,17 +842,17 @@ export function ClinicalVisitHistory({ patientId }: PatientVisitTrackingProps) {
                       }}
                     />
                     <Legend
-                      wrapperStyle={{ fontSize: '11px', paddingTop: '15px' }}
+                      wrapperStyle={{ fontSize: "11px", paddingTop: "15px" }}
                       formatter={(value: string) => {
                         const param = clinicalParameters.find(
-                          (p) => p.key === value
+                          (p) => p.key === value,
                         )
                         return `${param?.label} (${param?.unit})`
                       }}
                     />
                     {selectedParameters.map((paramKey) => {
                       const param = clinicalParameters.find(
-                        (p) => p.key === paramKey
+                        (p) => p.key === paramKey,
                       )
                       return (
                         <Line
@@ -900,7 +900,7 @@ export function ClinicalVisitHistory({ patientId }: PatientVisitTrackingProps) {
                   </th>
                   {selectedParameters.slice(0, 3).map((paramKey) => {
                     const param = clinicalParameters.find(
-                      (p) => p.key === paramKey
+                      (p) => p.key === paramKey,
                     )
                     return (
                       <th
@@ -918,17 +918,17 @@ export function ClinicalVisitHistory({ patientId }: PatientVisitTrackingProps) {
                 </tr>
               </thead>
               <tbody>
-                {visits.map((visit, index) => {
+                {visits.map((visit, _index) => {
                   // Calculate patient age at visit time
                   const visitDate = new Date(visit.visitDate)
                   const today = new Date()
                   const daysSinceVisit = Math.floor(
                     (today.getTime() - visitDate.getTime()) /
-                      (1000 * 60 * 60 * 24)
+                      (1000 * 60 * 60 * 24),
                   )
                   const yearsSinceVisit = daysSinceVisit / 365.25
                   const ageAtVisit = Math.floor(
-                    (currentPatient?.age || 0) - yearsSinceVisit
+                    (currentPatient?.age || 0) - yearsSinceVisit,
                   )
 
                   return (
@@ -940,10 +940,10 @@ export function ClinicalVisitHistory({ patientId }: PatientVisitTrackingProps) {
                         {visit.visitNumber}
                       </td>
                       <td className="py-2 px-3 text-[10px]">
-                        {new Date(visit.visitDate).toLocaleDateString('en-US', {
-                          year: '2-digit',
-                          month: 'short',
-                          day: 'numeric'
+                        {new Date(visit.visitDate).toLocaleDateString("en-US", {
+                          year: "2-digit",
+                          month: "short",
+                          day: "numeric",
                         })}
                       </td>
                       <td className="py-2 px-2 text-center text-[10px] text-muted-foreground">
@@ -951,7 +951,7 @@ export function ClinicalVisitHistory({ patientId }: PatientVisitTrackingProps) {
                       </td>
                       {selectedParameters.slice(0, 3).map((paramKey) => {
                         const param = clinicalParameters.find(
-                          (p) => p.key === paramKey
+                          (p) => p.key === paramKey,
                         )
                         const value = visit[
                           paramKey as keyof ClinicalVisit
@@ -964,7 +964,7 @@ export function ClinicalVisitHistory({ patientId }: PatientVisitTrackingProps) {
                           <td
                             key={paramKey}
                             className={`py-2 px-2 text-center font-semibold ${
-                              isNormal ? 'text-alert-low' : 'text-alert-high'
+                              isNormal ? "text-alert-low" : "text-alert-high"
                             }`}
                           >
                             {value}

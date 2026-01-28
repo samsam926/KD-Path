@@ -1,8 +1,8 @@
-import { ViewAllPatientsView } from '@/components/Patients/AllPatientsView'
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from "@tanstack/react-router"
+import { ViewAllPatientsView } from "@/components/Patients/AllPatientsView"
 
-export const Route = createFileRoute('/_layout/allpatients')({
-  component: RouteComponent
+export const Route = createFileRoute("/_layout/allpatients")({
+  component: RouteComponent,
 })
 
 function RouteComponent() {

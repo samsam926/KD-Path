@@ -1,17 +1,17 @@
-import { Card } from '@/components/ui/card'
-import { useState } from 'react'
 import {
+  Activity,
+  AlertTriangle,
   ChevronDown,
   ChevronRight,
-  Info,
-  AlertTriangle,
   Copy,
-  Microscope,
   Droplet,
-  Activity,
   Heart,
-  Layers
-} from 'lucide-react'
+  Info,
+  Layers,
+  Microscope,
+} from "lucide-react"
+import { useState } from "react"
+import { Card } from "@/components/ui/card"
 
 interface DKDStructuralInsightsProps {
   patientId: string
@@ -20,7 +20,7 @@ interface DKDStructuralInsightsProps {
 
 export function DKDStructuralInsights({
   patientId,
-  isActive
+  isActive,
 }: DKDStructuralInsightsProps) {
   const [showDetailedMap, setShowDetailedMap] = useState(false)
   const [expandedSection, setExpandedSection] = useState<string | null>(null)
@@ -29,34 +29,34 @@ export function DKDStructuralInsights({
     tubules: false,
     vessels: false,
     fibrosis: true,
-    inflammation: false
+    inflammation: false,
   })
 
   // Mock data - would come from API
-  const hasDKDData = patientId === '67475' || patientId === '67475'
+  const hasDKDData = patientId === "67475" || patientId === "67475"
 
   if (!isActive || !hasDKDData) {
     return null
   }
 
   const lesionData = [
-    { label: 'Chronic Fibrosis', value: 35, color: '#087F8C' },
-    { label: 'Segmental Glomerular Scarring', value: 28, color: '#B6E3E9' },
-    { label: 'Vascular Injury', value: 18, color: '#98C1B4' },
-    { label: 'Early Structural Change', value: 12, color: '#3F4785' },
-    { label: 'Other', value: 7, color: '#E5E7EB' }
+    { label: "Chronic Fibrosis", value: 35, color: "#087F8C" },
+    { label: "Segmental Glomerular Scarring", value: 28, color: "#B6E3E9" },
+    { label: "Vascular Injury", value: 18, color: "#98C1B4" },
+    { label: "Early Structural Change", value: 12, color: "#3F4785" },
+    { label: "Other", value: 7, color: "#E5E7EB" },
   ]
 
   const totalValue = lesionData.reduce((sum, item) => sum + item.value, 0)
 
   const clinicalInterpretation =
-    'The model identifies chronic periglomerular fibrosis and segmental glomerular scarring as dominant contributors to progression risk. These findings are consistent with advanced diabetic kidney disease and suggest limited reversibility.'
+    "The model identifies chronic periglomerular fibrosis and segmental glomerular scarring as dominant contributors to progression risk. These findings are consistent with advanced diabetic kidney disease and suggest limited reversibility."
 
   const structuralMap = [
-    { region: 'Glomerular Compartment', chronic: 72, acute: 12, normal: 16 },
-    { region: 'Tubular Compartment', chronic: 58, acute: 18, normal: 24 },
-    { region: 'Vascular Compartment', chronic: 45, acute: 8, normal: 47 },
-    { region: 'Interstitial Compartment', chronic: 68, acute: 14, normal: 18 }
+    { region: "Glomerular Compartment", chronic: 72, acute: 12, normal: 16 },
+    { region: "Tubular Compartment", chronic: 58, acute: 18, normal: 24 },
+    { region: "Vascular Compartment", chronic: 45, acute: 8, normal: 47 },
+    { region: "Interstitial Compartment", chronic: 68, acute: 14, normal: 18 },
   ]
 
   const toggleSection = (section: string) => {
@@ -89,189 +89,193 @@ export function DKDStructuralInsights({
       </div>
 
       {/* Biopsy Visualization Section */}
-      {false && <div className="border border-gray-200 rounded-lg p-4 bg-gradient-to-br from-blue-50/30 to-purple-50/30">
-        <h3 className="font-semibold text-healthcare-primary mb-4 flex items-center gap-2">
-          <Layers className="h-5 w-5" />
-          Digital Pathology Biopsy Visualization
-        </h3>
+      {false && (
+        <div className="border border-gray-200 rounded-lg p-4 bg-gradient-to-br from-blue-50/30 to-purple-50/30">
+          <h3 className="font-semibold text-healthcare-primary mb-4 flex items-center gap-2">
+            <Layers className="h-5 w-5" />
+            Digital Pathology Biopsy Visualization
+          </h3>
 
-        <div className="grid grid-cols-3 gap-6">
-          {/* WSI Thumbnail with Interactive Elements */}
-          <div className="col-span-1">
-            <div className="relative">
-              <div className="w-full aspect-square bg-gradient-to-br from-pink-100 via-purple-50 to-blue-100 rounded-lg border-2 border-gray-300 relative overflow-hidden cursor-pointer hover:border-healthcare-accent transition-all hover:shadow-lg group">
-                {/* Simulated tissue pattern with overlays */}
-                <div className="absolute inset-0 opacity-60">
-                  {/* Glomeruli - shown when overlay active */}
-                  {activeOverlays.glomeruli && (
-                    <>
-                      <div className="absolute w-12 h-12 rounded-full bg-healthcare-primary/40 top-8 left-12 border-2 border-healthcare-primary/60 animate-pulse" />
-                      <div className="absolute w-10 h-10 rounded-full bg-healthcare-primary/40 top-20 left-32 border-2 border-healthcare-primary/60" />
-                      <div className="absolute w-11 h-11 rounded-full bg-healthcare-primary/30 top-36 left-20 border-2 border-healthcare-primary/50" />
-                      <div className="absolute w-9 h-9 rounded-full bg-healthcare-primary/35 top-32 left-40 border-2 border-healthcare-primary/55" />
-                    </>
-                  )}
+          <div className="grid grid-cols-3 gap-6">
+            {/* WSI Thumbnail with Interactive Elements */}
+            <div className="col-span-1">
+              <div className="relative">
+                <div className="w-full aspect-square bg-gradient-to-br from-pink-100 via-purple-50 to-blue-100 rounded-lg border-2 border-gray-300 relative overflow-hidden cursor-pointer hover:border-healthcare-accent transition-all hover:shadow-lg group">
+                  {/* Simulated tissue pattern with overlays */}
+                  <div className="absolute inset-0 opacity-60">
+                    {/* Glomeruli - shown when overlay active */}
+                    {activeOverlays.glomeruli && (
+                      <>
+                        <div className="absolute w-12 h-12 rounded-full bg-healthcare-primary/40 top-8 left-12 border-2 border-healthcare-primary/60 animate-pulse" />
+                        <div className="absolute w-10 h-10 rounded-full bg-healthcare-primary/40 top-20 left-32 border-2 border-healthcare-primary/60" />
+                        <div className="absolute w-11 h-11 rounded-full bg-healthcare-primary/30 top-36 left-20 border-2 border-healthcare-primary/50" />
+                        <div className="absolute w-9 h-9 rounded-full bg-healthcare-primary/35 top-32 left-40 border-2 border-healthcare-primary/55" />
+                      </>
+                    )}
 
-                  {/* Tubules - shown when overlay active */}
-                  {activeOverlays.tubules && (
-                    <>
-                      <div className="absolute w-16 h-3 bg-purple-400/50 top-16 left-8 rotate-12 rounded" />
-                      <div className="absolute w-20 h-3 bg-purple-400/40 top-28 left-24 -rotate-6 rounded" />
-                      <div className="absolute w-14 h-3 bg-purple-400/45 top-40 left-36 rotate-3 rounded" />
-                    </>
-                  )}
+                    {/* Tubules - shown when overlay active */}
+                    {activeOverlays.tubules && (
+                      <>
+                        <div className="absolute w-16 h-3 bg-purple-400/50 top-16 left-8 rotate-12 rounded" />
+                        <div className="absolute w-20 h-3 bg-purple-400/40 top-28 left-24 -rotate-6 rounded" />
+                        <div className="absolute w-14 h-3 bg-purple-400/45 top-40 left-36 rotate-3 rounded" />
+                      </>
+                    )}
 
-                  {/* Blood Vessels - shown when overlay active */}
-                  {activeOverlays.vessels && (
-                    <>
-                      <div className="absolute w-24 h-2 bg-red-500/60 top-12 left-4 rotate-45 rounded-full" />
-                      <div className="absolute w-20 h-2 bg-red-500/50 top-36 left-16 -rotate-12 rounded-full" />
-                    </>
-                  )}
+                    {/* Blood Vessels - shown when overlay active */}
+                    {activeOverlays.vessels && (
+                      <>
+                        <div className="absolute w-24 h-2 bg-red-500/60 top-12 left-4 rotate-45 rounded-full" />
+                        <div className="absolute w-20 h-2 bg-red-500/50 top-36 left-16 -rotate-12 rounded-full" />
+                      </>
+                    )}
 
-                  {/* Fibrosis markers - shown when overlay active */}
-                  {activeOverlays.fibrosis && (
-                    <>
-                      <div className="absolute w-8 h-8 bg-orange-500/40 top-24 left-44 rounded" />
-                      <div className="absolute w-10 h-6 bg-orange-500/35 top-44 left-28 rounded" />
-                      <div className="absolute w-6 h-10 bg-orange-500/30 top-12 left-36 rounded" />
-                    </>
-                  )}
+                    {/* Fibrosis markers - shown when overlay active */}
+                    {activeOverlays.fibrosis && (
+                      <>
+                        <div className="absolute w-8 h-8 bg-orange-500/40 top-24 left-44 rounded" />
+                        <div className="absolute w-10 h-6 bg-orange-500/35 top-44 left-28 rounded" />
+                        <div className="absolute w-6 h-10 bg-orange-500/30 top-12 left-36 rounded" />
+                      </>
+                    )}
 
-                  {/* Inflammation - shown when overlay active */}
-                  {activeOverlays.inflammation && (
-                    <>
-                      <div className="absolute w-4 h-4 bg-yellow-400/60 top-18 left-24 rounded-full" />
-                      <div className="absolute w-3 h-3 bg-yellow-400/60 top-30 left-38 rounded-full" />
-                      <div className="absolute w-3 h-3 bg-yellow-400/60 top-42 left-16 rounded-full" />
-                    </>
-                  )}
+                    {/* Inflammation - shown when overlay active */}
+                    {activeOverlays.inflammation && (
+                      <>
+                        <div className="absolute w-4 h-4 bg-yellow-400/60 top-18 left-24 rounded-full" />
+                        <div className="absolute w-3 h-3 bg-yellow-400/60 top-30 left-38 rounded-full" />
+                        <div className="absolute w-3 h-3 bg-yellow-400/60 top-42 left-16 rounded-full" />
+                      </>
+                    )}
+                  </div>
+
+                  {/* Hover overlay */}
+                  <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/0 group-hover:bg-black/10 transition-all">
+                    <Microscope className="h-8 w-8 text-healthcare-primary opacity-0 group-hover:opacity-100 transition-opacity mb-1" />
+                    <span className="text-xs text-healthcare-primary font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
+                      Click to view full WSI
+                    </span>
+                  </div>
                 </div>
 
-                {/* Hover overlay */}
-                <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/0 group-hover:bg-black/10 transition-all">
-                  <Microscope className="h-8 w-8 text-healthcare-primary opacity-0 group-hover:opacity-100 transition-opacity mb-1" />
-                  <span className="text-xs text-healthcare-primary font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
-                    Click to view full WSI
-                  </span>
+                <div className="mt-2 text-center">
+                  <p className="text-xs font-semibold text-gray-700">
+                    Digital Pathology Slide
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    Biopsy Date: Jan 15, 2024
+                  </p>
                 </div>
-              </div>
-
-              <div className="mt-2 text-center">
-                <p className="text-xs font-semibold text-gray-700">
-                  Digital Pathology Slide
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  Biopsy Date: Jan 15, 2024
-                </p>
               </div>
             </div>
-          </div>
 
-          {/* Overlay Controls */}
-          <div className="col-span-2 space-y-4">
-            <div>
-              <p className="text-sm font-semibold text-gray-700 mb-3">
-                Interactive Tissue Overlays
-              </p>
-              <p className="text-xs text-muted-foreground mb-3">
-                Toggle overlays to visualize different kidney compartments and
-                injury patterns
-              </p>
+            {/* Overlay Controls */}
+            <div className="col-span-2 space-y-4">
+              <div>
+                <p className="text-sm font-semibold text-gray-700 mb-3">
+                  Interactive Tissue Overlays
+                </p>
+                <p className="text-xs text-muted-foreground mb-3">
+                  Toggle overlays to visualize different kidney compartments and
+                  injury patterns
+                </p>
 
-              <div className="grid grid-cols-2 gap-3">
-                {[
-                  {
-                    key: 'glomeruli' as const,
-                    label: 'Glomeruli',
-                    desc: 'Filtering units - showing sclerotic changes',
-                    icon: Droplet,
-                    color: 'text-healthcare-primary'
-                  },
-                  {
-                    key: 'tubules' as const,
-                    label: 'Tubular Structures',
-                    desc: 'Reabsorption tubules with atrophy',
-                    icon: Activity,
-                    color: 'text-purple-600'
-                  },
-                  {
-                    key: 'vessels' as const,
-                    label: 'Blood Vessels',
-                    desc: 'Arterial and arteriolar structures',
-                    icon: Heart,
-                    color: 'text-red-600'
-                  },
-                  {
-                    key: 'fibrosis' as const,
-                    label: 'Fibrotic Regions',
-                    desc: 'Areas of chronic structural damage',
-                    icon: Layers,
-                    color: 'text-orange-600'
-                  },
-                  {
-                    key: 'inflammation' as const,
-                    label: 'Inflammatory Infiltrates',
-                    desc: 'Acute inflammatory cell presence',
-                    icon: AlertTriangle,
-                    color: 'text-yellow-600'
-                  }
-                ].map((overlay) => (
-                  <label
-                    key={overlay.key}
-                    className={`flex items-start gap-3 p-3 rounded-lg border-2 cursor-pointer transition-all ${
-                      activeOverlays[overlay.key]
-                        ? 'bg-healthcare-primary/5 border-healthcare-primary shadow-sm'
-                        : 'bg-white border-gray-200 hover:border-gray-300'
-                    }`}
-                  >
-                    <input
-                      type="checkbox"
-                      checked={activeOverlays[overlay.key]}
-                      onChange={() => toggleOverlay(overlay.key)}
-                      className="w-4 h-4 mt-0.5 text-healthcare-primary border-gray-300 rounded focus:ring-healthcare-accent"
-                    />
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-1">
-                        <overlay.icon className={`h-4 w-4 ${overlay.color}`} />
-                        <span className="text-sm font-semibold text-gray-700">
-                          {overlay.label}
-                        </span>
+                <div className="grid grid-cols-2 gap-3">
+                  {[
+                    {
+                      key: "glomeruli" as const,
+                      label: "Glomeruli",
+                      desc: "Filtering units - showing sclerotic changes",
+                      icon: Droplet,
+                      color: "text-healthcare-primary",
+                    },
+                    {
+                      key: "tubules" as const,
+                      label: "Tubular Structures",
+                      desc: "Reabsorption tubules with atrophy",
+                      icon: Activity,
+                      color: "text-purple-600",
+                    },
+                    {
+                      key: "vessels" as const,
+                      label: "Blood Vessels",
+                      desc: "Arterial and arteriolar structures",
+                      icon: Heart,
+                      color: "text-red-600",
+                    },
+                    {
+                      key: "fibrosis" as const,
+                      label: "Fibrotic Regions",
+                      desc: "Areas of chronic structural damage",
+                      icon: Layers,
+                      color: "text-orange-600",
+                    },
+                    {
+                      key: "inflammation" as const,
+                      label: "Inflammatory Infiltrates",
+                      desc: "Acute inflammatory cell presence",
+                      icon: AlertTriangle,
+                      color: "text-yellow-600",
+                    },
+                  ].map((overlay) => (
+                    <label
+                      key={overlay.key}
+                      className={`flex items-start gap-3 p-3 rounded-lg border-2 cursor-pointer transition-all ${
+                        activeOverlays[overlay.key]
+                          ? "bg-healthcare-primary/5 border-healthcare-primary shadow-sm"
+                          : "bg-white border-gray-200 hover:border-gray-300"
+                      }`}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={activeOverlays[overlay.key]}
+                        onChange={() => toggleOverlay(overlay.key)}
+                        className="w-4 h-4 mt-0.5 text-healthcare-primary border-gray-300 rounded focus:ring-healthcare-accent"
+                      />
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-1">
+                          <overlay.icon
+                            className={`h-4 w-4 ${overlay.color}`}
+                          />
+                          <span className="text-sm font-semibold text-gray-700">
+                            {overlay.label}
+                          </span>
+                        </div>
+                        <p className="text-xs text-gray-500">{overlay.desc}</p>
                       </div>
-                      <p className="text-xs text-gray-500">{overlay.desc}</p>
-                    </div>
-                  </label>
-                ))}
+                    </label>
+                  ))}
+                </div>
               </div>
-            </div>
 
-            {/* Quick Stats */}
-            <div className="bg-white border border-gray-200 rounded-lg p-3">
-              <p className="text-xs font-semibold text-gray-700 mb-2">
-                Biopsy Quantification
-              </p>
-              <div className="grid grid-cols-3 gap-3">
-                <div>
-                  <p className="text-xs text-muted-foreground">
-                    Total Glomeruli
-                  </p>
-                  <p className="font-semibold text-healthcare-primary">48</p>
-                </div>
-                <div>
-                  <p className="text-xs text-muted-foreground">Sclerotic</p>
-                  <p className="font-semibold text-orange-600">34%</p>
-                </div>
-                <div>
-                  <p className="text-xs text-muted-foreground">
-                    Fibrosis Score
-                  </p>
-                  <p className="font-semibold text-orange-600">High (3/4)</p>
+              {/* Quick Stats */}
+              <div className="bg-white border border-gray-200 rounded-lg p-3">
+                <p className="text-xs font-semibold text-gray-700 mb-2">
+                  Biopsy Quantification
+                </p>
+                <div className="grid grid-cols-3 gap-3">
+                  <div>
+                    <p className="text-xs text-muted-foreground">
+                      Total Glomeruli
+                    </p>
+                    <p className="font-semibold text-healthcare-primary">48</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground">Sclerotic</p>
+                    <p className="font-semibold text-orange-600">34%</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground">
+                      Fibrosis Score
+                    </p>
+                    <p className="font-semibold text-orange-600">High (3/4)</p>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>}
+      )}
 
       {/* Lesion Importance Summary */}
       <div className="grid grid-cols-2 gap-6">
@@ -307,8 +311,8 @@ export function DKDStructuralInsights({
                   `L ${x2} ${y2}`,
                   `A ${outerRadius} ${outerRadius} 0 ${largeArcFlag} 1 ${x3} ${y3}`,
                   `L ${x4} ${y4}`,
-                  `A ${innerRadius} ${innerRadius} 0 ${largeArcFlag} 0 ${x1} ${y1}`
-                ].join(' ')
+                  `A ${innerRadius} ${innerRadius} 0 ${largeArcFlag} 0 ${x1} ${y1}`,
+                ].join(" ")
 
                 return (
                   <path
@@ -473,11 +477,11 @@ export function DKDStructuralInsights({
         {/* Progression Drivers */}
         <div className="border border-gray-200 rounded-lg">
           <button
-            onClick={() => toggleSection('drivers')}
+            onClick={() => toggleSection("drivers")}
             className="w-full flex items-center justify-between p-4 hover:bg-gray-50 transition-colors"
           >
             <div className="flex items-center gap-2">
-              {expandedSection === 'drivers' ? (
+              {expandedSection === "drivers" ? (
                 <ChevronDown className="h-4 w-4 text-healthcare-primary" />
               ) : (
                 <ChevronRight className="h-4 w-4 text-healthcare-primary" />
@@ -488,34 +492,34 @@ export function DKDStructuralInsights({
             </div>
           </button>
 
-          {expandedSection === 'drivers' && (
+          {expandedSection === "drivers" && (
             <div className="px-4 pb-4 space-y-3">
               {[
                 {
-                  driver: 'Chronic fibrosis burden',
+                  driver: "Chronic fibrosis burden",
                   contribution: 35,
-                  trend: 'Progressive'
+                  trend: "Progressive",
                 },
                 {
-                  driver: 'Glomerular scarring pattern',
+                  driver: "Glomerular scarring pattern",
                   contribution: 28,
-                  trend: 'Stable'
+                  trend: "Stable",
                 },
                 {
-                  driver: 'Vascular injury severity',
+                  driver: "Vascular injury severity",
                   contribution: 18,
-                  trend: 'Progressive'
+                  trend: "Progressive",
                 },
                 {
-                  driver: 'Tubular atrophy extent',
+                  driver: "Tubular atrophy extent",
                   contribution: 12,
-                  trend: 'Moderate'
+                  trend: "Moderate",
                 },
                 {
-                  driver: 'Inflammatory markers',
+                  driver: "Inflammatory markers",
                   contribution: 7,
-                  trend: 'Low'
-                }
+                  trend: "Low",
+                },
               ].map((item) => (
                 <div key={item.driver}>
                   <div className="flex items-center justify-between mb-1">
@@ -544,11 +548,11 @@ export function DKDStructuralInsights({
         {/* Reversibility Assessment */}
         <div className="border border-gray-200 rounded-lg">
           <button
-            onClick={() => toggleSection('reversibility')}
+            onClick={() => toggleSection("reversibility")}
             className="w-full flex items-center justify-between p-4 hover:bg-gray-50 transition-colors"
           >
             <div className="flex items-center gap-2">
-              {expandedSection === 'reversibility' ? (
+              {expandedSection === "reversibility" ? (
                 <ChevronDown className="h-4 w-4 text-healthcare-primary" />
               ) : (
                 <ChevronRight className="h-4 w-4 text-healthcare-primary" />
@@ -562,7 +566,7 @@ export function DKDStructuralInsights({
             </span>
           </button>
 
-          {expandedSection === 'reversibility' && (
+          {expandedSection === "reversibility" && (
             <div className="px-4 pb-4 space-y-3">
               <p className="text-sm text-gray-600">
                 Assessment of potentially modifiable vs. irreversible structural

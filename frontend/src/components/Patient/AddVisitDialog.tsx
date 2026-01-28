@@ -1,29 +1,15 @@
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  Legend,
-  ReferenceArea,
-  ReferenceLine
-} from 'recharts'
-
+import { useState } from "react"
+import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogContent,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogFooter
-} from '@/components/ui/dialog'
-import { Button } from '@/components/ui/button'
-import { Label } from '@/components/ui/label'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-
-import { useState } from 'react'
+} from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
 
 const [showAddVisitDialog, setShowAddVisitDialog] = useState(false)
 const [newVisitData, setNewVisitData] = useState<Record<string, string>>({})
@@ -31,7 +17,7 @@ const [newVisitData, setNewVisitData] = useState<Record<string, string>>({})
 export function AddVisitDialog({
   currentPatient,
   clinicalParameters,
-  handleAddVisit
+  handleAddVisit,
 }: {
   currentPatient: any
   clinicalParameters: any[]
@@ -54,12 +40,12 @@ export function AddVisitDialog({
                 type="date"
                 value={
                   newVisitData.visitDate ||
-                  new Date().toISOString().split('T')[0]
+                  new Date().toISOString().split("T")[0]
                 }
                 onChange={(e) =>
                   setNewVisitData((prev) => ({
                     ...prev,
-                    visitDate: e.target.value
+                    visitDate: e.target.value,
                   }))
                 }
               />
@@ -75,11 +61,11 @@ export function AddVisitDialog({
                   type="number"
                   step="0.1"
                   placeholder={`${param.normalRange.min}-${param.normalRange.max}`}
-                  value={newVisitData[param.key] || ''}
+                  value={newVisitData[param.key] || ""}
                   onChange={(e) =>
                     setNewVisitData((prev) => ({
                       ...prev,
-                      [param.key]: e.target.value
+                      [param.key]: e.target.value,
                     }))
                   }
                 />
@@ -91,11 +77,11 @@ export function AddVisitDialog({
               <Textarea
                 id="notes"
                 placeholder="Enter clinical observations and notes..."
-                value={newVisitData.notes || ''}
+                value={newVisitData.notes || ""}
                 onChange={(e) =>
                   setNewVisitData((prev) => ({
                     ...prev,
-                    notes: e.target.value
+                    notes: e.target.value,
                   }))
                 }
                 rows={3}

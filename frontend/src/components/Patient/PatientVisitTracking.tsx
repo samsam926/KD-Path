@@ -1,146 +1,146 @@
-import { useState, useEffect } from 'react'
-import { Card } from '@/components/ui/card'
-import { usePatients, ClinicalVisit } from '@/contexts/PatientContext'
-import { Button } from '@/components/ui/button'
-import { Activity, Check, ChevronsUpDown } from 'lucide-react'
-import { Badge } from '@/components/ui/badge'
-import { toast } from 'sonner'
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger
-} from '@/components/ui/popover'
+import { Activity, Check, ChevronsUpDown } from "lucide-react"
+import { useEffect, useState } from "react"
+import { toast } from "sonner"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { Card } from "@/components/ui/card"
 import {
   Command,
   CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
-  CommandList
-} from '@/components/ui/command'
-import { cn } from '@/lib/utils'
-import { SinglePatientKidneyRisk } from './SinglePatientKidneyRisk'
+  CommandList,
+} from "@/components/ui/command"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+import { type ClinicalVisit, usePatients } from "@/contexts/PatientContext"
+import { cn } from "@/lib/utils"
+import { SinglePatientKidneyRisk } from "./SinglePatientKidneyRisk"
 
 const clinicalParameters = [
   {
-    key: 'EGFR',
-    label: 'eGFR',
-    unit: 'mL/min/1.73m²',
-    color: '#095256',
-    normalRange: { min: 60, max: 120 }
+    key: "EGFR",
+    label: "eGFR",
+    unit: "mL/min/1.73m²",
+    color: "#095256",
+    normalRange: { min: 60, max: 120 },
   },
   {
-    key: 'BP_SYSTOLIC',
-    label: 'BP Systolic',
-    unit: 'mmHg',
-    color: '#087F8C',
-    normalRange: { min: 90, max: 140 }
+    key: "BP_SYSTOLIC",
+    label: "BP Systolic",
+    unit: "mmHg",
+    color: "#087F8C",
+    normalRange: { min: 90, max: 140 },
   },
   {
-    key: 'BP_DIASTOLIC',
-    label: 'BP Diastolic',
-    unit: 'mmHg',
-    color: '#3F4785',
-    normalRange: { min: 60, max: 90 }
+    key: "BP_DIASTOLIC",
+    label: "BP Diastolic",
+    unit: "mmHg",
+    color: "#3F4785",
+    normalRange: { min: 60, max: 90 },
   },
   {
-    key: 'HBA1C',
-    label: 'HbA1c',
-    unit: '%',
-    color: '#98C1B4',
-    normalRange: { min: 4, max: 5.7 }
+    key: "HBA1C",
+    label: "HbA1c",
+    unit: "%",
+    color: "#98C1B4",
+    normalRange: { min: 4, max: 5.7 },
   },
   {
-    key: 'HEMOGLOBIN',
-    label: 'Hemoglobin',
-    unit: 'g/dL',
-    color: '#B6E3E9',
-    normalRange: { min: 12, max: 17 }
+    key: "HEMOGLOBIN",
+    label: "Hemoglobin",
+    unit: "g/dL",
+    color: "#B6E3E9",
+    normalRange: { min: 12, max: 17 },
   },
   {
-    key: 'ALKALINE_PHOSPHATASE',
-    label: 'Alkaline Phosphatase',
-    unit: 'U/L',
-    color: '#095256',
-    normalRange: { min: 30, max: 120 }
+    key: "ALKALINE_PHOSPHATASE",
+    label: "Alkaline Phosphatase",
+    unit: "U/L",
+    color: "#095256",
+    normalRange: { min: 30, max: 120 },
   },
   {
-    key: 'ALT_SGPT',
-    label: 'ALT (SGPT)',
-    unit: 'U/L',
-    color: '#087F8C',
-    normalRange: { min: 7, max: 56 }
+    key: "ALT_SGPT",
+    label: "ALT (SGPT)",
+    unit: "U/L",
+    color: "#087F8C",
+    normalRange: { min: 7, max: 56 },
   },
   {
-    key: 'AST_SGOT',
-    label: 'AST (SGOT)',
-    unit: 'U/L',
-    color: '#3F4785',
-    normalRange: { min: 10, max: 40 }
+    key: "AST_SGOT",
+    label: "AST (SGOT)",
+    unit: "U/L",
+    color: "#3F4785",
+    normalRange: { min: 10, max: 40 },
   },
   {
-    key: 'CHOLESTEROL',
-    label: 'Total Cholesterol',
-    unit: 'mg/dL',
-    color: '#98C1B4',
-    normalRange: { min: 125, max: 200 }
+    key: "CHOLESTEROL",
+    label: "Total Cholesterol",
+    unit: "mg/dL",
+    color: "#98C1B4",
+    normalRange: { min: 125, max: 200 },
   },
   {
-    key: 'LDL',
-    label: 'LDL Cholesterol',
-    unit: 'mg/dL',
-    color: '#B6E3E9',
-    normalRange: { min: 0, max: 100 }
+    key: "LDL",
+    label: "LDL Cholesterol",
+    unit: "mg/dL",
+    color: "#B6E3E9",
+    normalRange: { min: 0, max: 100 },
   },
   {
-    key: 'HDL',
-    label: 'HDL Cholesterol',
-    unit: 'mg/dL',
-    color: '#095256',
-    normalRange: { min: 40, max: 60 }
+    key: "HDL",
+    label: "HDL Cholesterol",
+    unit: "mg/dL",
+    color: "#095256",
+    normalRange: { min: 40, max: 60 },
   },
   {
-    key: 'TRIGLYCERIDES',
-    label: 'Triglycerides',
-    unit: 'mg/dL',
-    color: '#087F8C',
-    normalRange: { min: 0, max: 150 }
+    key: "TRIGLYCERIDES",
+    label: "Triglycerides",
+    unit: "mg/dL",
+    color: "#087F8C",
+    normalRange: { min: 0, max: 150 },
   },
   {
-    key: 'INR',
-    label: 'INR',
-    unit: '',
-    color: '#3F4785',
-    normalRange: { min: 0.8, max: 1.2 }
+    key: "INR",
+    label: "INR",
+    unit: "",
+    color: "#3F4785",
+    normalRange: { min: 0.8, max: 1.2 },
   },
   {
-    key: 'TBIL',
-    label: 'Total Bilirubin',
-    unit: 'mg/dL',
-    color: '#98C1B4',
-    normalRange: { min: 0.1, max: 1.2 }
+    key: "TBIL",
+    label: "Total Bilirubin",
+    unit: "mg/dL",
+    color: "#98C1B4",
+    normalRange: { min: 0.1, max: 1.2 },
   },
   {
-    key: 'WT',
-    label: 'Weight',
-    unit: 'kg',
-    color: '#B6E3E9',
-    normalRange: { min: 50, max: 100 }
+    key: "WT",
+    label: "Weight",
+    unit: "kg",
+    color: "#B6E3E9",
+    normalRange: { min: 50, max: 100 },
   },
   {
-    key: 'CREATINE_KINASE',
-    label: 'Creatine Kinase',
-    unit: 'U/L',
-    color: '#095256',
-    normalRange: { min: 22, max: 198 }
+    key: "CREATINE_KINASE",
+    label: "Creatine Kinase",
+    unit: "U/L",
+    color: "#095256",
+    normalRange: { min: 22, max: 198 },
   },
   {
-    key: 'TROPONIN',
-    label: 'Troponin',
-    unit: 'ng/L',
-    color: '#087F8C',
-    normalRange: { min: 0, max: 14 }
-  }
+    key: "TROPONIN",
+    label: "Troponin",
+    unit: "ng/L",
+    color: "#087F8C",
+    normalRange: { min: 0, max: 14 },
+  },
 ]
 
 interface PatientVisitTrackingProps {
@@ -148,27 +148,27 @@ interface PatientVisitTrackingProps {
 }
 
 export function PatientVisitTracking({
-  onPatientSelect
+  onPatientSelect,
 }: PatientVisitTrackingProps = {}) {
   const { patients, getPatient, addVisit } = usePatients()
-  const [selectedPatientId, setSelectedPatientId] = useState<string>('')
-  const [searchInput, setSearchInput] = useState<string>('')
-  const [selectedParameters, setSelectedParameters] = useState<string[]>([
-    'EGFR',
-    'BP_SYSTOLIC',
-    'HBA1C'
+  const [selectedPatientId, setSelectedPatientId] = useState<string>("")
+  const [searchInput, _setSearchInput] = useState<string>("")
+  const [_selectedParameters, setSelectedParameters] = useState<string[]>([
+    "EGFR",
+    "BP_SYSTOLIC",
+    "HBA1C",
   ])
-  const [showAddVisitDialog, setShowAddVisitDialog] = useState(false)
+  const [_showAddVisitDialog, setShowAddVisitDialog] = useState(false)
   const [newVisitData, setNewVisitData] = useState<Record<string, string>>({})
   const [open, setOpen] = useState(false)
 
   // Get patients with visit history
   const patientsWithVisits = patients.filter(
-    (p) => p.visits && p.visits.length > 0
+    (p) => p.visits && p.visits.length > 0,
   )
 
   // Default to first patient with visits
-  const currentPatientId = selectedPatientId || patientsWithVisits[0]?.id || ''
+  const currentPatientId = selectedPatientId || patientsWithVisits[0]?.id || ""
   const currentPatient = patients.find((p) => p.id === currentPatientId)
   const visits = currentPatient?.visits || []
 
@@ -180,7 +180,7 @@ export function PatientVisitTracking({
   }, [currentPatientId, onPatientSelect])
 
   // Handle search from Patient Vitals Monitor
-  const handleSearch = () => {
+  const _handleSearch = () => {
     const upperCaseInput = searchInput.toUpperCase()
     const patient = getPatient(upperCaseInput)
     if (patient) {
@@ -189,7 +189,7 @@ export function PatientVisitTracking({
         toast.success(`Patient ${patient.name} loaded`)
       }
     } else {
-      toast.error('Patient not found')
+      toast.error("Patient not found")
     }
   }
 
@@ -197,15 +197,15 @@ export function PatientVisitTracking({
   const getLastVisitDate = () => {
     if (visits.length > 0) {
       return new Date(visits[visits.length - 1].visitDate).toLocaleDateString(
-        'en-US',
+        "en-US",
         {
-          year: 'numeric',
-          month: 'short',
-          day: 'numeric'
-        }
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+        },
       )
     }
-    return 'No visits recorded'
+    return "No visits recorded"
   }
 
   // Mock vitals history data for the vitals chart (simulating time-series data)
@@ -214,66 +214,66 @@ export function PatientVisitTracking({
 
     return [
       {
-        time: '00:00',
+        time: "00:00",
         ...vitals,
         heartRate: vitals.heartRate - 3,
-        oxygenSat: vitals.oxygenSat - 1
+        oxygenSat: vitals.oxygenSat - 1,
       },
       {
-        time: '04:00',
+        time: "04:00",
         ...vitals,
         heartRate: vitals.heartRate - 5,
-        oxygenSat: vitals.oxygenSat - 2
+        oxygenSat: vitals.oxygenSat - 2,
       },
       {
-        time: '08:00',
+        time: "08:00",
         ...vitals,
         heartRate: vitals.heartRate + 1,
-        oxygenSat: vitals.oxygenSat
+        oxygenSat: vitals.oxygenSat,
       },
       {
-        time: '12:00',
+        time: "12:00",
         ...vitals,
         heartRate: vitals.heartRate + 3,
-        oxygenSat: vitals.oxygenSat + 1
+        oxygenSat: vitals.oxygenSat + 1,
       },
       {
-        time: '16:00',
+        time: "16:00",
         ...vitals,
         heartRate: vitals.heartRate,
-        oxygenSat: vitals.oxygenSat
+        oxygenSat: vitals.oxygenSat,
       },
       {
-        time: '20:00',
+        time: "20:00",
         ...vitals,
         heartRate: vitals.heartRate - 2,
-        oxygenSat: vitals.oxygenSat - 1
-      }
+        oxygenSat: vitals.oxygenSat - 1,
+      },
     ]
   }
 
-  const vitalsData = currentPatient?.vitals
+  const _vitalsData = currentPatient?.vitals
     ? generateVitalsHistory(currentPatient.vitals)
     : []
 
   // Prepare chart data
-  const chartData = visits.map((visit) => {
+  const _chartData = visits.map((visit) => {
     // Calculate patient age at visit time
     const visitDate = new Date(visit.visitDate)
     const today = new Date()
     const daysSinceVisit = Math.floor(
-      (today.getTime() - visitDate.getTime()) / (1000 * 60 * 60 * 24)
+      (today.getTime() - visitDate.getTime()) / (1000 * 60 * 60 * 24),
     )
     const yearsSinceVisit = daysSinceVisit / 365.25
     const ageAtVisit = Math.floor((currentPatient?.age || 0) - yearsSinceVisit)
 
     const dataPoint: any = {
       visitNumber: `V${visit.visitNumber}`,
-      date: new Date(visit.visitDate).toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric'
+      date: new Date(visit.visitDate).toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
       }),
-      ageAtVisit: ageAtVisit
+      ageAtVisit: ageAtVisit,
     }
 
     clinicalParameters.forEach((param) => {
@@ -283,15 +283,15 @@ export function PatientVisitTracking({
     return dataPoint
   })
 
-  const toggleParameter = (paramKey: string) => {
+  const _toggleParameter = (paramKey: string) => {
     setSelectedParameters((prev) =>
       prev.includes(paramKey)
         ? prev.filter((p) => p !== paramKey)
-        : [...prev, paramKey]
+        : [...prev, paramKey],
     )
   }
 
-  const getTrend = (paramKey: string) => {
+  const _getTrend = (paramKey: string) => {
     if (visits.length < 2) return null
     const lastVisit = visits[visits.length - 1]
     const previousVisit = visits[visits.length - 2]
@@ -300,42 +300,42 @@ export function PatientVisitTracking({
     const change = ((current - previous) / previous) * 100
 
     return {
-      direction: change > 0 ? 'up' : 'down',
-      percentage: Math.abs(change).toFixed(1)
+      direction: change > 0 ? "up" : "down",
+      percentage: Math.abs(change).toFixed(1),
     }
   }
 
-  const handleAddVisit = () => {
+  const _handleAddVisit = () => {
     if (!currentPatientId) return
 
-    const visitData: Omit<ClinicalVisit, 'visitNumber'> = {
+    const visitData: Omit<ClinicalVisit, "visitNumber"> = {
       visitDate: new Date(newVisitData.visitDate || new Date()),
-      EGFR: parseFloat(newVisitData.EGFR || '0'),
-      BP_SYSTOLIC: parseFloat(newVisitData.BP_SYSTOLIC || '0'),
-      BP_DIASTOLIC: parseFloat(newVisitData.BP_DIASTOLIC || '0'),
-      HBA1C: parseFloat(newVisitData.HBA1C || '0'),
-      HEMOGLOBIN: parseFloat(newVisitData.HEMOGLOBIN || '0'),
+      EGFR: parseFloat(newVisitData.EGFR || "0"),
+      BP_SYSTOLIC: parseFloat(newVisitData.BP_SYSTOLIC || "0"),
+      BP_DIASTOLIC: parseFloat(newVisitData.BP_DIASTOLIC || "0"),
+      HBA1C: parseFloat(newVisitData.HBA1C || "0"),
+      HEMOGLOBIN: parseFloat(newVisitData.HEMOGLOBIN || "0"),
       ALKALINE_PHOSPHATASE: parseFloat(
-        newVisitData.ALKALINE_PHOSPHATASE || '0'
+        newVisitData.ALKALINE_PHOSPHATASE || "0",
       ),
-      ALT_SGPT: parseFloat(newVisitData.ALT_SGPT || '0'),
-      AST_SGOT: parseFloat(newVisitData.AST_SGOT || '0'),
-      CHOLESTEROL: parseFloat(newVisitData.CHOLESTEROL || '0'),
-      LDL: parseFloat(newVisitData.LDL || '0'),
-      HDL: parseFloat(newVisitData.HDL || '0'),
-      TRIGLYCERIDES: parseFloat(newVisitData.TRIGLYCERIDES || '0'),
-      INR: parseFloat(newVisitData.INR || '0'),
-      TBIL: parseFloat(newVisitData.TBIL || '0'),
-      WT: parseFloat(newVisitData.WT || '0'),
-      CREATINE_KINASE: parseFloat(newVisitData.CREATINE_KINASE || '0'),
-      TROPONIN: parseFloat(newVisitData.TROPONIN || '0'),
-      notes: newVisitData.notes || ''
+      ALT_SGPT: parseFloat(newVisitData.ALT_SGPT || "0"),
+      AST_SGOT: parseFloat(newVisitData.AST_SGOT || "0"),
+      CHOLESTEROL: parseFloat(newVisitData.CHOLESTEROL || "0"),
+      LDL: parseFloat(newVisitData.LDL || "0"),
+      HDL: parseFloat(newVisitData.HDL || "0"),
+      TRIGLYCERIDES: parseFloat(newVisitData.TRIGLYCERIDES || "0"),
+      INR: parseFloat(newVisitData.INR || "0"),
+      TBIL: parseFloat(newVisitData.TBIL || "0"),
+      WT: parseFloat(newVisitData.WT || "0"),
+      CREATINE_KINASE: parseFloat(newVisitData.CREATINE_KINASE || "0"),
+      TROPONIN: parseFloat(newVisitData.TROPONIN || "0"),
+      notes: newVisitData.notes || "",
     }
 
     addVisit(currentPatientId, visitData)
     setShowAddVisitDialog(false)
     setNewVisitData({})
-    toast.success('Visit added successfully')
+    toast.success("Visit added successfully")
   }
 
   if (patientsWithVisits.length === 0) {
@@ -384,7 +384,7 @@ export function PatientVisitTracking({
               {currentPatientId
                 ? patients.find((patient) => patient.id === currentPatientId)
                     ?.id
-                : 'Search or select patient...'}
+                : "Search or select patient..."}
               <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
             </Button>
           </PopoverTrigger>
@@ -405,17 +405,17 @@ export function PatientVisitTracking({
                         const selectedPatient = getPatient(selectedId)
                         if (selectedPatient?.vitals) {
                           toast.success(
-                            `Patient ${selectedPatient.name} loaded`
+                            `Patient ${selectedPatient.name} loaded`,
                           )
                         }
                       }}
                     >
                       <Check
                         className={cn(
-                          'mr-2 h-4 w-4',
+                          "mr-2 h-4 w-4",
                           currentPatientId === patient.id
-                            ? 'opacity-100'
-                            : 'opacity-0'
+                            ? "opacity-100"
+                            : "opacity-0",
                         )}
                       />
                       {patient.id}
@@ -464,16 +464,16 @@ export function PatientVisitTracking({
                 <Badge
                   className={`
                   ${
-                    currentPatient.status === 'CKD' ||
-                    currentPatient.status === 'Fast Progression CKD'
-                      ? 'bg-alert-high'
-                      : currentPatient.status === 'Healthy'
-                        ? 'bg-alert-low'
-                        : 'bg-yellow-600'
+                    currentPatient.status === "CKD" ||
+                    currentPatient.status === "Fast Progression CKD"
+                      ? "bg-alert-high"
+                      : currentPatient.status === "Healthy"
+                        ? "bg-alert-low"
+                        : "bg-yellow-600"
                   } text-white
                 `}
                 >
-                  {currentPatient.status || 'Unknown'}
+                  {currentPatient.status || "Unknown"}
                 </Badge>
               </div>
             </div>

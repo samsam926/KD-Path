@@ -1,17 +1,16 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from "@tanstack/react-router"
+import { HomeView } from "@/components/Patients/HomeView"
+import useAuth from "@/hooks/useAuth"
 
-import useAuth from '@/hooks/useAuth'
-import { HomeView } from '@/components/Patients/HomeView'
-
-export const Route = createFileRoute('/_layout/')({
+export const Route = createFileRoute("/_layout/")({
   component: Dashboard,
   head: () => ({
     meta: [
       {
-        title: 'Dashboard - CKD Path'
-      }
-    ]
-  })
+        title: "Dashboard - CKD Path",
+      },
+    ],
+  }),
 })
 
 function Dashboard() {

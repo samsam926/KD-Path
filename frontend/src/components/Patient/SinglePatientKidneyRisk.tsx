@@ -1,27 +1,27 @@
-import { Card } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { usePatients } from '@/contexts/PatientContext'
-import { Activity, AlertTriangle, TrendingUp, Edit, Heart } from 'lucide-react'
-import { Progress } from '@/components/ui/progress'
-import { Button } from '@/components/ui/button'
-import { PatientKidneyDetails } from './PatientKidneyDetails'
+import { Activity, AlertTriangle, Edit, Heart, TrendingUp } from "lucide-react"
+import { useState } from "react"
+import { toast } from "sonner"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { Card } from "@/components/ui/card"
 import {
   Dialog,
   DialogContent,
   DialogHeader,
-  DialogTitle
-} from '@/components/ui/dialog'
-import { useState } from 'react'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { toast } from 'sonner'
+  DialogTitle,
+} from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Progress } from "@/components/ui/progress"
+import { usePatients } from "@/contexts/PatientContext"
+import { PatientKidneyDetails } from "./PatientKidneyDetails"
 
 interface SinglePatientKidneyRiskProps {
   patientId?: string
 }
 
 export function SinglePatientKidneyRisk({
-  patientId
+  patientId,
 }: SinglePatientKidneyRiskProps) {
   const { patients, updatePatient } = usePatients()
 
@@ -29,72 +29,72 @@ export function SinglePatientKidneyRisk({
   const patient = patientId ? patients.find((p) => p.id === patientId) : null
 
   const getRiskLevel = (
-    twoYearRisk?: number
+    twoYearRisk?: number,
   ): { level: string; color: string; bgColor: string } => {
     if (!twoYearRisk)
       return {
-        level: 'Unknown',
-        color: 'text-muted-foreground',
-        bgColor: 'bg-muted'
+        level: "Unknown",
+        color: "text-muted-foreground",
+        bgColor: "bg-muted",
       }
     if (twoYearRisk >= 20)
       return {
-        level: 'Very High',
-        color: 'text-alert-high',
-        bgColor: 'bg-alert-high'
+        level: "Very High",
+        color: "text-alert-high",
+        bgColor: "bg-alert-high",
       }
     if (twoYearRisk >= 10)
       return {
-        level: 'High',
-        color: 'text-orange-600',
-        bgColor: 'bg-orange-600'
+        level: "High",
+        color: "text-orange-600",
+        bgColor: "bg-orange-600",
       }
     if (twoYearRisk >= 5)
       return {
-        level: 'Moderate',
-        color: 'text-amber-600',
-        bgColor: 'bg-amber-600'
+        level: "Moderate",
+        color: "text-amber-600",
+        bgColor: "bg-amber-600",
       }
     if (twoYearRisk >= 2)
       return {
-        level: 'Low-Moderate',
-        color: 'text-yellow-600',
-        bgColor: 'bg-yellow-600'
+        level: "Low-Moderate",
+        color: "text-yellow-600",
+        bgColor: "bg-yellow-600",
       }
     return {
-      level: 'Low',
-      color: 'text-alert-low',
-      bgColor: 'bg-alert-low'
+      level: "Low",
+      color: "text-alert-low",
+      bgColor: "bg-alert-low",
     }
   }
 
   const getACRCategory = (acr?: number): string => {
-    if (!acr) return 'Unknown'
-    if (acr < 30) return 'Normal'
-    if (acr < 300) return 'Moderately Increased'
-    return 'Severely Increased'
+    if (!acr) return "Unknown"
+    if (acr < 30) return "Normal"
+    if (acr < 300) return "Moderately Increased"
+    return "Severely Increased"
   }
 
   const getACRColor = (acr?: number): string => {
-    if (!acr) return 'text-muted-foreground'
-    if (acr < 30) return 'text-alert-low'
-    if (acr < 300) return 'text-amber-600'
-    return 'text-alert-high'
+    if (!acr) return "text-muted-foreground"
+    if (acr < 30) return "text-alert-low"
+    if (acr < 300) return "text-amber-600"
+    return "text-alert-high"
   }
 
   const [showEditDialog, setShowEditDialog] = useState(false)
-  const [neweGFR, setNeweGFR] = useState('')
-  const [newACR, setNewACR] = useState('')
-  const [newTwoYearRisk, setNewTwoYearRisk] = useState('')
-  const [newFiveYearRisk, setNewFiveYearRisk] = useState('')
+  const [neweGFR, setNeweGFR] = useState("")
+  const [newACR, setNewACR] = useState("")
+  const [newTwoYearRisk, setNewTwoYearRisk] = useState("")
+  const [newFiveYearRisk, setNewFiveYearRisk] = useState("")
   const [showDetailsDialog, setShowDetailsDialog] = useState(false)
 
   const handleEdit = () => {
     if (patient) {
-      setNeweGFR(patient.vitals?.eGFR?.toString() || '')
-      setNewACR(patient.vitals?.acr?.toString() || '')
-      setNewTwoYearRisk(patient.vitals?.twoYearRisk?.toString() || '')
-      setNewFiveYearRisk(patient.vitals?.fiveYearRisk?.toString() || '')
+      setNeweGFR(patient.vitals?.eGFR?.toString() || "")
+      setNewACR(patient.vitals?.acr?.toString() || "")
+      setNewTwoYearRisk(patient.vitals?.twoYearRisk?.toString() || "")
+      setNewFiveYearRisk(patient.vitals?.fiveYearRisk?.toString() || "")
       setShowEditDialog(true)
     }
   }
@@ -106,10 +106,10 @@ export function SinglePatientKidneyRisk({
         eGFR: neweGFR ? parseFloat(neweGFR) : null,
         acr: newACR ? parseFloat(newACR) : null,
         twoYearRisk: newTwoYearRisk ? parseFloat(newTwoYearRisk) : null,
-        fiveYearRisk: newFiveYearRisk ? parseFloat(newFiveYearRisk) : null
+        fiveYearRisk: newFiveYearRisk ? parseFloat(newFiveYearRisk) : null,
       }
       updatePatient(patient)
-      toast.success('Patient data updated successfully')
+      toast.success("Patient data updated successfully")
       setShowEditDialog(false)
     }
   }
@@ -118,7 +118,7 @@ export function SinglePatientKidneyRisk({
     setShowEditDialog(false)
   }
 
-  const handleShowDetails = () => {
+  const _handleShowDetails = () => {
     setShowDetailsDialog(true)
   }
 
@@ -177,13 +177,13 @@ export function SinglePatientKidneyRisk({
           <p
             className={`text-3xl font-bold mb-1 ${
               (patient.vitals?.eGFR || 0) >= 60
-                ? 'text-alert-low'
+                ? "text-alert-low"
                 : (patient.vitals?.eGFR || 0) >= 30
-                  ? 'text-amber-600'
-                  : 'text-alert-high'
+                  ? "text-amber-600"
+                  : "text-alert-high"
             }`}
           >
-            {patient.vitals?.eGFR || 'N/A'}
+            {patient.vitals?.eGFR || "N/A"}
           </p>
           <p className="text-xs text-muted-foreground">mL/min/1.73m²</p>
           <div className="mt-3">
@@ -203,17 +203,17 @@ export function SinglePatientKidneyRisk({
           <p
             className={`text-3xl font-bold mb-1 ${getACRColor(patient.vitals?.acr)}`}
           >
-            {patient.vitals?.acr || 'N/A'}
+            {patient.vitals?.acr || "N/A"}
           </p>
           <p className="text-xs text-muted-foreground">mg/g Cr</p>
           <div className="mt-3">
             <Badge
               className={`text-xs ${
                 (patient.vitals?.acr || 0) < 30
-                  ? 'bg-alert-low'
+                  ? "bg-alert-low"
                   : (patient.vitals?.acr || 0) < 300
-                    ? 'bg-amber-600'
-                    : 'bg-alert-high'
+                    ? "bg-amber-600"
+                    : "bg-alert-high"
               } text-white`}
             >
               {getACRCategory(patient.vitals?.acr)}
@@ -230,7 +230,7 @@ export function SinglePatientKidneyRisk({
             <AlertTriangle className="h-4 w-4 text-orange-600" />
           </div>
           <p className={`text-3xl font-bold mb-1 ${riskInfo.color}`}>
-            {patient.vitals?.twoYearRisk?.toFixed(1) || 'N/A'}%
+            {patient.vitals?.twoYearRisk?.toFixed(1) || "N/A"}%
           </p>
           <p className="text-xs text-muted-foreground">Kidney Failure</p>
           <div className="mt-3">
@@ -250,7 +250,7 @@ export function SinglePatientKidneyRisk({
             <AlertTriangle className="h-4 w-4 text-alert-high" />
           </div>
           <p className={`text-3xl font-bold mb-1 ${riskInfo.color}`}>
-            {patient.vitals?.fiveYearRisk?.toFixed(1) || 'N/A'}%
+            {patient.vitals?.fiveYearRisk?.toFixed(1) || "N/A"}%
           </p>
           <p className="text-xs text-muted-foreground">Kidney Failure</p>
           <div className="mt-3">
@@ -281,35 +281,35 @@ export function SinglePatientKidneyRisk({
         <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
           <div className="p-3 bg-alert-low/10 rounded-lg border border-alert-low/20">
             <div className="flex items-center gap-2 mb-1">
-              <div className="w-3 h-3 rounded-full bg-alert-low"></div>
+              <div className="w-3 h-3 rounded-full bg-alert-low" />
               <span className="text-xs font-semibold">Low</span>
             </div>
-            <p className="text-xs text-muted-foreground">{'<'}2% (2-year)</p>
+            <p className="text-xs text-muted-foreground">{"<"}2% (2-year)</p>
           </div>
           <div className="p-3 bg-yellow-100 rounded-lg border border-yellow-200">
             <div className="flex items-center gap-2 mb-1">
-              <div className="w-3 h-3 rounded-full bg-yellow-600"></div>
+              <div className="w-3 h-3 rounded-full bg-yellow-600" />
               <span className="text-xs font-semibold">Low-Moderate</span>
             </div>
             <p className="text-xs text-muted-foreground">2-5% (2-year)</p>
           </div>
           <div className="p-3 bg-amber-100 rounded-lg border border-amber-200">
             <div className="flex items-center gap-2 mb-1">
-              <div className="w-3 h-3 rounded-full bg-amber-600"></div>
+              <div className="w-3 h-3 rounded-full bg-amber-600" />
               <span className="text-xs font-semibold">Moderate</span>
             </div>
             <p className="text-xs text-muted-foreground">5-10% (2-year)</p>
           </div>
           <div className="p-3 bg-orange-100 rounded-lg border border-orange-200">
             <div className="flex items-center gap-2 mb-1">
-              <div className="w-3 h-3 rounded-full bg-orange-600"></div>
+              <div className="w-3 h-3 rounded-full bg-orange-600" />
               <span className="text-xs font-semibold">High</span>
             </div>
             <p className="text-xs text-muted-foreground">10-20% (2-year)</p>
           </div>
           <div className="p-3 bg-alert-high/10 rounded-lg border border-alert-high/20">
             <div className="flex items-center gap-2 mb-1">
-              <div className="w-3 h-3 rounded-full bg-alert-high"></div>
+              <div className="w-3 h-3 rounded-full bg-alert-high" />
               <span className="text-xs font-semibold">Very High</span>
             </div>
             <p className="text-xs text-muted-foreground">≥20% (2-year)</p>
@@ -327,7 +327,7 @@ export function SinglePatientKidneyRisk({
               <p className="text-sm font-semibold text-green-700 mb-1">
                 Normal
               </p>
-              <p className="text-xs text-muted-foreground">{'<'}30 mg/g Cr</p>
+              <p className="text-xs text-muted-foreground">{"<"}30 mg/g Cr</p>
             </div>
             <div className="p-3 bg-amber-50 rounded-lg border border-amber-200">
               <p className="text-sm font-semibold text-amber-700 mb-1">

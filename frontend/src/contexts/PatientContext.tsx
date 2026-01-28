@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, ReactNode } from 'react'
+import { createContext, type ReactNode, useContext, useState } from "react"
 
 export interface ClinicalVisit {
   visitDate: Date
@@ -27,17 +27,17 @@ export interface Patient {
   id: string
   name: string
   age: number
-  gender: 'Male' | 'Female' | 'Other'
+  gender: "Male" | "Female" | "Other"
   race: string
   ward: string
   status?:
-    | 'CKD'
-    | 'CKD uncertainty'
-    | 'Fast Progression CKD'
-    | 'FastCKD uncertainty'
-    | 'Healthy'
-    | 'Healthy uncertainty'
-    | 'discharged'
+    | "CKD"
+    | "CKD uncertainty"
+    | "Fast Progression CKD"
+    | "FastCKD uncertainty"
+    | "Healthy"
+    | "Healthy uncertainty"
+    | "discharged"
   vitals?: {
     heartRate: number
     bloodPressureSys: number
@@ -58,17 +58,17 @@ export interface Patient {
 interface PatientContextType {
   patients: Patient[]
   addPatient: (
-    patient: Omit<Patient, 'id' | 'createdAt' | 'updatedAt'>
+    patient: Omit<Patient, "id" | "createdAt" | "updatedAt">,
   ) => string
   updatePatient: (
     id: string,
-    updates: Partial<Omit<Patient, 'id' | 'createdAt'>>
+    updates: Partial<Omit<Patient, "id" | "createdAt">>,
   ) => void
   getPatient: (id: string) => Patient | undefined
   deletePatient: (id: string) => void
   addVisit: (
     patientId: string,
-    visit: Omit<ClinicalVisit, 'visitNumber'>
+    visit: Omit<ClinicalVisit, "visitNumber">,
   ) => void
 }
 
@@ -77,13 +77,13 @@ const PatientContext = createContext<PatientContextType | undefined>(undefined)
 // Initial mock data
 const initialPatients: Patient[] = [
   {
-    id: '67493',
-    name: '67493',
+    id: "67493",
+    name: "67493",
     age: 43,
-    gender: 'Male',
-    race: 'Caucasian',
-    ward: 'Cardiology',
-    status: 'Healthy',
+    gender: "Male",
+    race: "Caucasian",
+    ward: "Cardiology",
+    status: "Healthy",
     vitals: {
       heartRate: 72,
       bloodPressureSys: 120,
@@ -93,7 +93,7 @@ const initialPatients: Patient[] = [
       eGFR: 85,
       acr: 15,
       twoYearRisk: 0.5,
-      fiveYearRisk: 1.2
+      fiveYearRisk: 1.2,
     },
     visits: [
       {
@@ -116,7 +116,7 @@ const initialPatients: Patient[] = [
         WT: 78,
         CREATINE_KINASE: 145,
         TROPONIN: 5,
-        notes: 'Initial baseline assessment'
+        notes: "Initial baseline assessment",
       },
       {
         visitDate: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000),
@@ -138,7 +138,7 @@ const initialPatients: Patient[] = [
         WT: 77.5,
         CREATINE_KINASE: 138,
         TROPONIN: 4,
-        notes: 'Follow-up - showing slight improvement'
+        notes: "Follow-up - showing slight improvement",
       },
       {
         visitDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
@@ -160,20 +160,20 @@ const initialPatients: Patient[] = [
         WT: 77,
         CREATINE_KINASE: 142,
         TROPONIN: 4,
-        notes: 'Stable, continue current regimen'
-      }
+        notes: "Stable, continue current regimen",
+      },
     ],
     createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000), // 3 days ago
-    updatedAt: new Date()
+    updatedAt: new Date(),
   },
   {
-    id: '67475',
-    name: '67475',
+    id: "67475",
+    name: "67475",
     age: 65,
-    gender: 'Female',
-    race: 'Hispanic',
-    ward: 'Emergency',
-    status: 'CKD',
+    gender: "Female",
+    race: "Hispanic",
+    ward: "Emergency",
+    status: "CKD",
     vitals: {
       heartRate: 88,
       bloodPressureSys: 148,
@@ -183,7 +183,7 @@ const initialPatients: Patient[] = [
       eGFR: 51,
       acr: 125,
       twoYearRisk: 7.5,
-      fiveYearRisk: 16.8
+      fiveYearRisk: 16.8,
     },
     visits: [
       {
@@ -206,7 +206,7 @@ const initialPatients: Patient[] = [
         WT: 82,
         CREATINE_KINASE: 185,
         TROPONIN: 11,
-        notes: 'Emergency admission - baseline assessment at 8:00 AM'
+        notes: "Emergency admission - baseline assessment at 8:00 AM",
       },
       {
         visitDate: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000), // Same day - 15 days ago
@@ -228,7 +228,7 @@ const initialPatients: Patient[] = [
         WT: 81.8,
         CREATINE_KINASE: 192,
         TROPONIN: 13,
-        notes: 'Follow-up test after medication at 2:00 PM - showing decline'
+        notes: "Follow-up test after medication at 2:00 PM - showing decline",
       },
       {
         visitDate: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000), // Same day - 15 days ago
@@ -251,7 +251,7 @@ const initialPatients: Patient[] = [
         CREATINE_KINASE: 198,
         TROPONIN: 15,
         notes:
-          'Evening check at 8:00 PM - continuing deterioration, urgent intervention needed'
+          "Evening check at 8:00 PM - continuing deterioration, urgent intervention needed",
       },
       {
         visitDate: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000), // 10 days ago
@@ -273,7 +273,7 @@ const initialPatients: Patient[] = [
         WT: 81.5,
         CREATINE_KINASE: 195,
         TROPONIN: 14,
-        notes: 'Post-intervention assessment - slight stabilization'
+        notes: "Post-intervention assessment - slight stabilization",
       },
       {
         visitDate: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000), // 3 days ago
@@ -296,12 +296,12 @@ const initialPatients: Patient[] = [
         CREATINE_KINASE: 202,
         TROPONIN: 16,
         notes:
-          'Current status - moderate CKD progression, close monitoring continues'
-      }
+          "Current status - moderate CKD progression, close monitoring continues",
+      },
     ],
     createdAt: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000),
-    updatedAt: new Date()
-  }
+    updatedAt: new Date(),
+  },
 ]
 
 export function PatientProvider({ children }: { children: ReactNode }) {
@@ -309,14 +309,14 @@ export function PatientProvider({ children }: { children: ReactNode }) {
   const [nextId, setNextId] = useState(10)
 
   const addPatient = (
-    patient: Omit<Patient, 'id' | 'createdAt' | 'updatedAt'>
+    patient: Omit<Patient, "id" | "createdAt" | "updatedAt">,
   ): string => {
-    const newId = `PT${String(nextId).padStart(3, '0')}`
+    const newId = `PT${String(nextId).padStart(3, "0")}`
     const newPatient: Patient = {
       ...patient,
       id: newId,
       createdAt: new Date(),
-      updatedAt: new Date()
+      updatedAt: new Date(),
     }
     setPatients((prev) => [...prev, newPatient])
     setNextId((prev) => prev + 1)
@@ -325,14 +325,14 @@ export function PatientProvider({ children }: { children: ReactNode }) {
 
   const updatePatient = (
     id: string,
-    updates: Partial<Omit<Patient, 'id' | 'createdAt'>>
+    updates: Partial<Omit<Patient, "id" | "createdAt">>,
   ) => {
     setPatients((prev) =>
       prev.map((patient) =>
         patient.id === id
           ? { ...patient, ...updates, updatedAt: new Date() }
-          : patient
-      )
+          : patient,
+      ),
     )
   }
 
@@ -346,7 +346,7 @@ export function PatientProvider({ children }: { children: ReactNode }) {
 
   const addVisit = (
     patientId: string,
-    visit: Omit<ClinicalVisit, 'visitNumber'>
+    visit: Omit<ClinicalVisit, "visitNumber">,
   ) => {
     setPatients((prev) =>
       prev.map((patient) =>
@@ -355,11 +355,11 @@ export function PatientProvider({ children }: { children: ReactNode }) {
               ...patient,
               visits: [
                 ...(patient.visits || []),
-                { ...visit, visitNumber: (patient.visits?.length || 0) + 1 }
-              ]
+                { ...visit, visitNumber: (patient.visits?.length || 0) + 1 },
+              ],
             }
-          : patient
-      )
+          : patient,
+      ),
     )
   }
 
@@ -371,7 +371,7 @@ export function PatientProvider({ children }: { children: ReactNode }) {
         updatePatient,
         getPatient,
         deletePatient,
-        addVisit
+        addVisit,
       }}
     >
       {children}
@@ -382,7 +382,7 @@ export function PatientProvider({ children }: { children: ReactNode }) {
 export function usePatients() {
   const context = useContext(PatientContext)
   if (context === undefined) {
-    throw new Error('usePatients must be used within a PatientProvider')
+    throw new Error("usePatients must be used within a PatientProvider")
   }
   return context
 }

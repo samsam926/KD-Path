@@ -1,22 +1,20 @@
-import { BiopsyMechanisticInsights } from '@/components/Patient/BiopsyMechanisticInsights'
-import { ClinicalVisitHistory } from '@/components/Patient/ClinicalVisitHistory'
-import { DKDStructuralInsights } from '@/components/Patient/DKDStructuralInsights'
-import { PatientEGFRTrajectory } from '@/components/Patient/PatientEGFRTrajectory'
-import { PatientVisitTracking } from '@/components/Patient/PatientVisitTracking'
-import { SinglePatientKidneyRisk } from '@/components/Patient/SinglePatientKidneyRisk'
-import { QuickMetrics } from '@/components/Patients/QuickMetrics'
-import { createFileRoute, useRouter } from '@tanstack/react-router'
-import { ReactNode, useState } from 'react'
+import { createFileRoute } from "@tanstack/react-router"
+import { type ReactNode, useState } from "react"
+import { BiopsyMechanisticInsights } from "@/components/Patient/BiopsyMechanisticInsights"
+import { ClinicalVisitHistory } from "@/components/Patient/ClinicalVisitHistory"
+import { PatientEGFRTrajectory } from "@/components/Patient/PatientEGFRTrajectory"
+import { PatientVisitTracking } from "@/components/Patient/PatientVisitTracking"
+import { QuickMetrics } from "@/components/Patients/QuickMetrics"
 
-export const Route = createFileRoute('/_layout/trajectory')({
+export const Route = createFileRoute("/_layout/trajectory")({
   component: Trajectory,
   head: () => ({
     meta: [
       {
-        title: 'Patient Trajectory - CKD Path'
-      }
-    ]
-  })
+        title: "Patient Trajectory - CKD Path",
+      },
+    ],
+  }),
 })
 
 export function Trajectory(): ReactNode {
@@ -39,17 +37,17 @@ export function Trajectory(): ReactNode {
           </div>
           <div className="text-right text-sm text-muted-foreground">
             <div>
-              {new Date().toLocaleDateString('en-US', {
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
+              {new Date().toLocaleDateString("en-US", {
+                weekday: "long",
+                year: "numeric",
+                month: "long",
+                day: "numeric",
               })}
             </div>
             <div className="font-semibold text-healthcare-primary">
-              {new Date().toLocaleTimeString('en-US', {
-                hour: '2-digit',
-                minute: '2-digit'
+              {new Date().toLocaleTimeString("en-US", {
+                hour: "2-digit",
+                minute: "2-digit",
               })}
             </div>
           </div>
@@ -62,13 +60,13 @@ export function Trajectory(): ReactNode {
         <PatientVisitTracking onPatientSelect={setTrajectoryPatientId} />
 
         {/* Clinical Visit History & Trends Chart - Full Width */}
-        <ClinicalVisitHistory patientId={trajectoryPatientId || '67475'} />
+        <ClinicalVisitHistory patientId={trajectoryPatientId || "67475"} />
 
         {/* Patient eGFR Trajectory by Age - Full Width */}
         <PatientEGFRTrajectory primaryPatientId={trajectoryPatientId} />
 
         {/* Biopsy & Mechanistic Insights - Full Width */}
-        <BiopsyMechanisticInsights patientId={trajectoryPatientId || '67475'} />
+        <BiopsyMechanisticInsights patientId={trajectoryPatientId || "67475"} />
 
         {/* Critical Patients Management */}
         {/* <CriticalPatientsSection /> */}
