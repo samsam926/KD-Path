@@ -868,6 +868,7 @@ export function PatientEGFRTrajectory({
                 ({patient.visits?.length || 0} visits)
               </span>
               <button
+                type="button"
                 onClick={() => removePatient(patient.id)}
                 className="ml-1 hover:bg-gray-200 rounded-full p-0.5 transition-colors"
               >

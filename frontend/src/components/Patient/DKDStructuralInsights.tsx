@@ -282,7 +282,11 @@ export function DKDStructuralInsights({
         {/* Donut Chart */}
         <div className="flex flex-col items-center justify-center">
           <div className="relative w-64 h-64">
-            <svg viewBox="0 0 200 200" className="transform -rotate-90">
+            <svg
+              viewBox="0 0 200 200"
+              className="transform -rotate-90"
+              title="DKD Structural Injury Distribution"
+            >
               {lesionData.map((item, index) => {
                 const prevSum = lesionData
                   .slice(0, index)
@@ -380,6 +384,7 @@ export function DKDStructuralInsights({
             Clinical Interpretation
           </h3>
           <button
+            type="button"
             onClick={copyInterpretation}
             className="flex items-center gap-1 text-xs text-healthcare-accent hover:underline"
           >
@@ -397,6 +402,7 @@ export function DKDStructuralInsights({
         {/* Structural Injury Map (Expandable) */}
         <div className="border border-gray-200 rounded-lg">
           <button
+            type="button"
             onClick={() => setShowDetailedMap(!showDetailedMap)}
             className="w-full flex items-center justify-between p-4 hover:bg-gray-50 transition-colors"
           >
@@ -428,7 +434,10 @@ export function DKDStructuralInsights({
                     <span className="text-sm font-semibold text-gray-700">
                       {compartment.region}
                     </span>
-                    <button className="text-xs text-healthcare-accent hover:underline flex items-center gap-1">
+                    <button
+                      className="text-xs text-healthcare-accent hover:underline flex items-center gap-1"
+                      type="button"
+                    >
                       <Info className="h-3 w-3" />
                       Details
                     </button>
@@ -477,6 +486,7 @@ export function DKDStructuralInsights({
         {/* Progression Drivers */}
         <div className="border border-gray-200 rounded-lg">
           <button
+            type="button"
             onClick={() => toggleSection("drivers")}
             className="w-full flex items-center justify-between p-4 hover:bg-gray-50 transition-colors"
           >
@@ -548,6 +558,7 @@ export function DKDStructuralInsights({
         {/* Reversibility Assessment */}
         <div className="border border-gray-200 rounded-lg">
           <button
+            type="button"
             onClick={() => toggleSection("reversibility")}
             className="w-full flex items-center justify-between p-4 hover:bg-gray-50 transition-colors"
           >

@@ -3,7 +3,7 @@
 import type { CancelablePromise } from './core/CancelablePromise';
 import { OpenAPI } from './core/OpenAPI';
 import { request as __request } from './core/request';
-import type { ItemsReadItemsData, ItemsReadItemsResponse, ItemsCreateItemData, ItemsCreateItemResponse, ItemsReadItemData, ItemsReadItemResponse, ItemsUpdateItemData, ItemsUpdateItemResponse, ItemsDeleteItemData, ItemsDeleteItemResponse, LoginLoginAccessTokenData, LoginLoginAccessTokenResponse, LoginTestTokenResponse, LoginRecoverPasswordData, LoginRecoverPasswordResponse, LoginResetPasswordData, LoginResetPasswordResponse, LoginRecoverPasswordHtmlContentData, LoginRecoverPasswordHtmlContentResponse, PrivateCreateUserData, PrivateCreateUserResponse, UsersReadUsersData, UsersReadUsersResponse, UsersCreateUserData, UsersCreateUserResponse, UsersReadUserMeResponse, UsersDeleteUserMeResponse, UsersUpdateUserMeData, UsersUpdateUserMeResponse, UsersUpdatePasswordMeData, UsersUpdatePasswordMeResponse, UsersRegisterUserData, UsersRegisterUserResponse, UsersReadUserByIdData, UsersReadUserByIdResponse, UsersUpdateUserData, UsersUpdateUserResponse, UsersDeleteUserData, UsersDeleteUserResponse, UtilsTestEmailData, UtilsTestEmailResponse, UtilsHealthCheckResponse } from './types.gen';
+import type { ItemsReadItemsData, ItemsReadItemsResponse, ItemsCreateItemData, ItemsCreateItemResponse, ItemsReadItemData, ItemsReadItemResponse, ItemsUpdateItemData, ItemsUpdateItemResponse, ItemsDeleteItemData, ItemsDeleteItemResponse, LoginLoginAccessTokenData, LoginLoginAccessTokenResponse, LoginTestTokenResponse, LoginRecoverPasswordData, LoginRecoverPasswordResponse, LoginResetPasswordData, LoginResetPasswordResponse, LoginRecoverPasswordHtmlContentData, LoginRecoverPasswordHtmlContentResponse, OmopGetPersonData, OmopGetPersonResponse, OmopListPersonsData, OmopListPersonsResponse, OmopGetPersonConditionsData, OmopGetPersonConditionsResponse, OmopGetConditionData, OmopGetConditionResponse, OmopGetPersonMeasurementsData, OmopGetPersonMeasurementsResponse, OmopGetMeasurementData, OmopGetMeasurementResponse, OmopGetMeasurementsByConceptData, OmopGetMeasurementsByConceptResponse, OmopGetPersonMedicationsData, OmopGetPersonMedicationsResponse, OmopGetActiveMedicationsData, OmopGetActiveMedicationsResponse, OmopGetPersonVisitsData, OmopGetPersonVisitsResponse, OmopGetVisitData, OmopGetVisitResponse, OmopGetPersonObservationsData, OmopGetPersonObservationsResponse, OmopGetPersonProceduresData, OmopGetPersonProceduresResponse, OmopSearchConceptsData, OmopSearchConceptsResponse, OmopGetConceptsByDomainData, OmopGetConceptsByDomainResponse, OmopGetConceptData, OmopGetConceptResponse, PatientsReadPatientsData, PatientsReadPatientsResponse, PatientsReadPatientByUuidData, PatientsReadPatientByUuidResponse, PatientsReadPatientData, PatientsReadPatientResponse, PrivateCreateUserData, PrivateCreateUserResponse, UsersReadUsersData, UsersReadUsersResponse, UsersCreateUserData, UsersCreateUserResponse, UsersReadUserMeResponse, UsersDeleteUserMeResponse, UsersUpdateUserMeData, UsersUpdateUserMeResponse, UsersUpdatePasswordMeData, UsersUpdatePasswordMeResponse, UsersRegisterUserData, UsersRegisterUserResponse, UsersReadUserByIdData, UsersReadUserByIdResponse, UsersUpdateUserData, UsersUpdateUserResponse, UsersDeleteUserData, UsersDeleteUserResponse, UtilsTestEmailData, UtilsTestEmailResponse, UtilsHealthCheckResponse } from './types.gen';
 
 export class ItemsService {
     /**
@@ -205,6 +205,472 @@ export class LoginService {
             url: '/api/v1/password-recovery-html-content/{email}',
             path: {
                 email: data.email
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+}
+
+export class OmopService {
+    /**
+     * Get Person
+     * Get a specific person's demographics with concept names
+     * @param data The data for the request.
+     * @param data.personId
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static getPerson(data: OmopGetPersonData): CancelablePromise<OmopGetPersonResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/omop/persons/{person_id}',
+            path: {
+                person_id: data.personId
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * List Persons
+     * Get paginated list of persons with optional search
+     * @param data The data for the request.
+     * @param data.skip
+     * @param data.limit
+     * @param data.q Search by person ID or source values
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static listPersons(data: OmopListPersonsData = {}): CancelablePromise<OmopListPersonsResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/omop/persons',
+            query: {
+                skip: data.skip,
+                limit: data.limit,
+                q: data.q
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Get Person Conditions
+     * Get all conditions for a person
+     * @param data The data for the request.
+     * @param data.personId
+     * @param data.skip
+     * @param data.limit
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static getPersonConditions(data: OmopGetPersonConditionsData): CancelablePromise<OmopGetPersonConditionsResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/omop/persons/{person_id}/conditions',
+            path: {
+                person_id: data.personId
+            },
+            query: {
+                skip: data.skip,
+                limit: data.limit
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Get Condition
+     * Get a specific condition occurrence
+     * @param data The data for the request.
+     * @param data.conditionId
+     * @returns ConditionOccurrencePublic Successful Response
+     * @throws ApiError
+     */
+    public static getCondition(data: OmopGetConditionData): CancelablePromise<OmopGetConditionResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/omop/conditions/{condition_id}',
+            path: {
+                condition_id: data.conditionId
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Get Person Measurements
+     * Get all measurements for a person
+     * @param data The data for the request.
+     * @param data.personId
+     * @param data.skip
+     * @param data.limit
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static getPersonMeasurements(data: OmopGetPersonMeasurementsData): CancelablePromise<OmopGetPersonMeasurementsResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/omop/persons/{person_id}/measurements',
+            path: {
+                person_id: data.personId
+            },
+            query: {
+                skip: data.skip,
+                limit: data.limit
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Get Measurement
+     * Get a specific measurement
+     * @param data The data for the request.
+     * @param data.measurementId
+     * @returns MeasurementPublic Successful Response
+     * @throws ApiError
+     */
+    public static getMeasurement(data: OmopGetMeasurementData): CancelablePromise<OmopGetMeasurementResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/omop/measurements/{measurement_id}',
+            path: {
+                measurement_id: data.measurementId
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Get Measurements By Concept
+     * Get measurements for a specific concept with optional date range
+     * @param data The data for the request.
+     * @param data.conceptId
+     * @param data.startDate
+     * @param data.endDate
+     * @param data.skip
+     * @param data.limit
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static getMeasurementsByConcept(data: OmopGetMeasurementsByConceptData): CancelablePromise<OmopGetMeasurementsByConceptResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/omop/measurements/concept/{concept_id}',
+            path: {
+                concept_id: data.conceptId
+            },
+            query: {
+                start_date: data.startDate,
+                end_date: data.endDate,
+                skip: data.skip,
+                limit: data.limit
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Get Person Medications
+     * Get all drug exposures for a person
+     * @param data The data for the request.
+     * @param data.personId
+     * @param data.skip
+     * @param data.limit
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static getPersonMedications(data: OmopGetPersonMedicationsData): CancelablePromise<OmopGetPersonMedicationsResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/omop/persons/{person_id}/medications',
+            path: {
+                person_id: data.personId
+            },
+            query: {
+                skip: data.skip,
+                limit: data.limit
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Get Active Medications
+     * Get currently active medications for a person
+     * @param data The data for the request.
+     * @param data.personId
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static getActiveMedications(data: OmopGetActiveMedicationsData): CancelablePromise<OmopGetActiveMedicationsResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/omop/persons/{person_id}/medications/active',
+            path: {
+                person_id: data.personId
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Get Person Visits
+     * Get all visits for a person
+     * @param data The data for the request.
+     * @param data.personId
+     * @param data.skip
+     * @param data.limit
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static getPersonVisits(data: OmopGetPersonVisitsData): CancelablePromise<OmopGetPersonVisitsResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/omop/persons/{person_id}/visits',
+            path: {
+                person_id: data.personId
+            },
+            query: {
+                skip: data.skip,
+                limit: data.limit
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Get Visit
+     * Get a specific visit
+     * @param data The data for the request.
+     * @param data.visitId
+     * @returns VisitOccurrencePublic Successful Response
+     * @throws ApiError
+     */
+    public static getVisit(data: OmopGetVisitData): CancelablePromise<OmopGetVisitResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/omop/visits/{visit_id}',
+            path: {
+                visit_id: data.visitId
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Get Person Observations
+     * Get all observations for a person
+     * @param data The data for the request.
+     * @param data.personId
+     * @param data.skip
+     * @param data.limit
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static getPersonObservations(data: OmopGetPersonObservationsData): CancelablePromise<OmopGetPersonObservationsResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/omop/persons/{person_id}/observations',
+            path: {
+                person_id: data.personId
+            },
+            query: {
+                skip: data.skip,
+                limit: data.limit
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Get Person Procedures
+     * Get all procedures for a person
+     * @param data The data for the request.
+     * @param data.personId
+     * @param data.skip
+     * @param data.limit
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static getPersonProcedures(data: OmopGetPersonProceduresData): CancelablePromise<OmopGetPersonProceduresResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/omop/persons/{person_id}/procedures',
+            path: {
+                person_id: data.personId
+            },
+            query: {
+                skip: data.skip,
+                limit: data.limit
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Search Concepts
+     * Search for concepts by name
+     * @param data The data for the request.
+     * @param data.q
+     * @param data.skip
+     * @param data.limit
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static searchConcepts(data: OmopSearchConceptsData): CancelablePromise<OmopSearchConceptsResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/omop/concepts/search',
+            query: {
+                q: data.q,
+                skip: data.skip,
+                limit: data.limit
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Get Concepts By Domain
+     * Get all concepts for a specific domain
+     * @param data The data for the request.
+     * @param data.domainId
+     * @param data.skip
+     * @param data.limit
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static getConceptsByDomain(data: OmopGetConceptsByDomainData): CancelablePromise<OmopGetConceptsByDomainResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/omop/concepts/domain/{domain_id}',
+            path: {
+                domain_id: data.domainId
+            },
+            query: {
+                skip: data.skip,
+                limit: data.limit
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Get Concept
+     * Get concept details by ID
+     * @param data The data for the request.
+     * @param data.conceptId
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static getConcept(data: OmopGetConceptData): CancelablePromise<OmopGetConceptResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/omop/concepts/{concept_id}',
+            path: {
+                concept_id: data.conceptId
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+}
+
+export class PatientsService {
+    /**
+     * Read Patients
+     * Retrieve patients from the patients database.
+     * @param data The data for the request.
+     * @param data.skip
+     * @param data.limit
+     * @returns PatientsPublic Successful Response
+     * @throws ApiError
+     */
+    public static readPatients(data: PatientsReadPatientsData = {}): CancelablePromise<PatientsReadPatientsResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/patients/',
+            query: {
+                skip: data.skip,
+                limit: data.limit
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Read Patient By Uuid
+     * Retrieve a complete patient profile by UUID.
+     * @param data The data for the request.
+     * @param data.patientUuid
+     * @returns FullPatientProfile Successful Response
+     * @throws ApiError
+     */
+    public static readPatientByUuid(data: PatientsReadPatientByUuidData): CancelablePromise<PatientsReadPatientByUuidResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/patients/by-uuid/{patient_uuid}',
+            path: {
+                patient_uuid: data.patientUuid
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Read Patient
+     * Retrieve a complete patient profile including all related health data.
+     * Accepts either patient_deiden_id or patient UUID.
+     * @param data The data for the request.
+     * @param data.patientId
+     * @returns FullPatientProfile Successful Response
+     * @throws ApiError
+     */
+    public static readPatient(data: PatientsReadPatientData): CancelablePromise<PatientsReadPatientResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/patients/{patient_id}',
+            path: {
+                patient_id: data.patientId
             },
             errors: {
                 422: 'Validation Error'

@@ -11,9 +11,6 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 
-const [showAddVisitDialog, setShowAddVisitDialog] = useState(false)
-const [newVisitData, setNewVisitData] = useState<Record<string, string>>({})
-
 export function AddVisitDialog({
   currentPatient,
   clinicalParameters,
@@ -23,6 +20,9 @@ export function AddVisitDialog({
   clinicalParameters: any[]
   handleAddVisit: () => void
 }) {
+  const [showAddVisitDialog, setShowAddVisitDialog] = useState(false)
+  const [newVisitData, setNewVisitData] = useState<Record<string, string>>({})
+
   return (
     <div>
       {/* Add Visit Dialog */}

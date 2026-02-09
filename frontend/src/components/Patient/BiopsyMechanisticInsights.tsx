@@ -132,6 +132,7 @@ export function BiopsyMechanisticInsights({
         {/* 6. Comparison Toolbar */}
         <div className="flex gap-3">
           <button
+            type="button"
             onClick={() =>
               setComparisonMode({
                 ...comparisonMode,
@@ -147,6 +148,7 @@ export function BiopsyMechanisticInsights({
             Compare Models
           </button>
           <button
+            type="button"
             onClick={() =>
               setComparisonMode({
                 ...comparisonMode,
@@ -162,6 +164,7 @@ export function BiopsyMechanisticInsights({
             Mechanistic Drivers
           </button>
           <button
+            type="button"
             onClick={() =>
               setComparisonMode({
                 ...comparisonMode,
@@ -209,6 +212,7 @@ export function BiopsyMechanisticInsights({
           )}
           <div className="mt-3 pt-3 border-t border-blue-300">
             <button
+              type="button"
               className="text-xs text-healthcare-accent hover:underline flex items-center gap-1"
               title="Uses eGFR, ACR, age, sex"
             >
@@ -321,13 +325,12 @@ export function BiopsyMechanisticInsights({
                   "Glucose control (HbA1c <7%)",
                   "Minimize med toxicity",
                   "Volume/sodium mgmt",
-                ].map((intervention, idx) => (
+                ].map((_intervention, idx) => (
                   <li
                     key={idx}
                     className="text-xs text-gray-700 flex items-start gap-1"
                   >
                     <span className="text-green-600 font-bold">✓</span>
-                    <span dangerouslySetInnerHTML={{ __html: intervention }} />
                   </li>
                 ))}
               </ul>
@@ -436,6 +439,7 @@ export function BiopsyMechanisticInsights({
         {/* A. Mechanistic Drivers */}
         <div className="border border-gray-200 rounded-lg">
           <button
+            type="button"
             onClick={() => toggleDetail("drivers")}
             className="w-full flex items-center justify-between p-4 hover:bg-gray-50 transition-colors"
           >
@@ -515,6 +519,7 @@ export function BiopsyMechanisticInsights({
         {/* B. Burden Analysis */}
         <div className="border border-gray-200 rounded-lg">
           <button
+            type="button"
             onClick={() => toggleDetail("burden")}
             className="w-full flex items-center justify-between p-4 hover:bg-gray-50 transition-colors"
           >
@@ -593,6 +598,7 @@ export function BiopsyMechanisticInsights({
         {/* C. Modifiable Risk Factors */}
         <div className="border border-gray-200 rounded-lg">
           <button
+            type="button"
             onClick={() => toggleDetail("modifiable")}
             className="w-full flex items-center justify-between p-4 hover:bg-gray-50 transition-colors"
           >
@@ -662,18 +668,10 @@ export function BiopsyMechanisticInsights({
                       </span>
                     </div>
                     <div className="text-xs text-gray-600">
-                      Current:{" "}
-                      <span
-                        className="font-semibold"
-                        dangerouslySetInnerHTML={{ __html: item.current }}
-                      />
+                      Current: <span className="font-semibold" />
                     </div>
                     <div className="text-xs text-gray-600">
-                      Target:{" "}
-                      <span
-                        className="font-semibold text-green-600"
-                        dangerouslySetInnerHTML={{ __html: item.target }}
-                      />
+                      Target: <span className="font-semibold text-green-600" />
                     </div>
                   </div>
                 ))}
@@ -685,6 +683,7 @@ export function BiopsyMechanisticInsights({
         {/* D. Model Input Summary */}
         <div className="border border-gray-200 rounded-lg">
           <button
+            type="button"
             onClick={() => toggleDetail("inputs")}
             className="w-full flex items-center justify-between p-4 hover:bg-gray-50 transition-colors"
           >
@@ -782,6 +781,7 @@ export function BiopsyMechanisticInsights({
         {/* E. Clinical Notes */}
         <div className="border border-gray-200 rounded-lg">
           <button
+            type="button"
             onClick={() => toggleDetail("notes")}
             className="w-full flex items-center justify-between p-4 hover:bg-gray-50 transition-colors"
           >
@@ -820,6 +820,7 @@ export function BiopsyMechanisticInsights({
                     {new Date().toLocaleDateString()}
                   </span>
                   <button
+                    type="button"
                     onClick={handleSaveNote}
                     disabled={!noteText.trim()}
                     className="flex items-center gap-2 px-4 py-2 text-sm bg-healthcare-primary text-white rounded-lg hover:bg-healthcare-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"

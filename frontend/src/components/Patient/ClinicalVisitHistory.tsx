@@ -150,7 +150,7 @@ interface PatientVisitTrackingProps {
 }
 
 export function ClinicalVisitHistory({ patientId }: PatientVisitTrackingProps) {
-  const { patients, getPatient, addVisit } = usePatients()
+  const { patients, getPatient } = usePatients()
   const [selectedPatientId, setSelectedPatientId] = useState<string>("")
   const [searchInput, _setSearchInput] = useState<string>("")
   const [selectedParameters, setSelectedParameters] = useState<string[]>([
@@ -456,6 +456,7 @@ export function ClinicalVisitHistory({ patientId }: PatientVisitTrackingProps) {
               >
                 <PopoverTrigger asChild>
                   <Button
+                    type="button"
                     variant="outline"
                     size="sm"
                     className="border-healthcare-primary/30 hover:bg-healthcare-primary/5 text-xs"
@@ -485,6 +486,7 @@ export function ClinicalVisitHistory({ patientId }: PatientVisitTrackingProps) {
 
                     <div className="grid grid-cols-2 gap-2">
                       <button
+                        type="button"
                         onClick={() => {
                           setDateRange("3months")
                           setFilterPopoverOpen(false)
@@ -498,6 +500,7 @@ export function ClinicalVisitHistory({ patientId }: PatientVisitTrackingProps) {
                         3 Months
                       </button>
                       <button
+                        type="button"
                         onClick={() => {
                           setDateRange("6months")
                           setFilterPopoverOpen(false)
@@ -511,6 +514,7 @@ export function ClinicalVisitHistory({ patientId }: PatientVisitTrackingProps) {
                         6 Months
                       </button>
                       <button
+                        type="button"
                         onClick={() => {
                           setDateRange("1year")
                           setFilterPopoverOpen(false)
@@ -524,6 +528,7 @@ export function ClinicalVisitHistory({ patientId }: PatientVisitTrackingProps) {
                         1 Year
                       </button>
                       <button
+                        type="button"
                         onClick={() => {
                           setDateRange("all")
                           setFilterPopoverOpen(false)
@@ -540,6 +545,7 @@ export function ClinicalVisitHistory({ patientId }: PatientVisitTrackingProps) {
 
                     <div className="pt-2 border-t">
                       <button
+                        type="button"
                         onClick={() => setDateRange("custom")}
                         className={`w-full px-3 py-2 rounded-md text-xs transition-all mb-2 ${
                           dateRange === "custom"
@@ -585,6 +591,7 @@ export function ClinicalVisitHistory({ patientId }: PatientVisitTrackingProps) {
                             />
                           </div>
                           <Button
+                            type="button"
                             size="sm"
                             className="w-full text-xs"
                             onClick={() => setFilterPopoverOpen(false)}
@@ -671,6 +678,7 @@ export function ClinicalVisitHistory({ patientId }: PatientVisitTrackingProps) {
                 const isSelected = selectedParameters.includes(param.key)
                 return (
                   <button
+                    type="button"
                     key={param.key}
                     onClick={() => toggleParameter(param.key)}
                     className={`
