@@ -50,6 +50,8 @@ class Settings(BaseSettings):
 
     PROJECT_NAME: str
     SENTRY_DSN: HttpUrl | None = None
+    
+    # Main application database
     POSTGRES_SERVER: str
     POSTGRES_PORT: int = 5432
     POSTGRES_USER: str
@@ -66,6 +68,34 @@ class Settings(BaseSettings):
             host=self.POSTGRES_SERVER,
             port=self.POSTGRES_PORT,
             path=self.POSTGRES_DB,
+        )
+    
+    # Patients database (separate connection)
+    PATIENTS_POSTGRES_SERVER: str | None = None
+    PATIENTS_POSTGRES_PORT: int = 5432
+    PATIENTS_POSTGRES_USER: str | None = None
+    PATIENTS_POSTGRES_PASSWORD: str | None = None
+    PATIENTS_POSTGRES_DB: str | None = None
+
+    # OMOP CDM schema name
+    OMOP_CDM_SCHEMA: str = "cdm"
+
+    @computed_field  # type: ignore[prop-decorator]
+    @property
+    def PATIENTS_DATABASE_URI(self) -> PostgresDsn | None:
+        if not all([
+            self.PATIENTS_POSTGRES_SERVER,
+            self.PATIENTS_POSTGRES_USER,
+            self.PATIENTS_POSTGRES_DB
+        ]):
+            return None
+        return PostgresDsn.build(
+            scheme="postgresql+psycopg",
+            username=self.PATIENTS_POSTGRES_USER,
+            password=self.PATIENTS_POSTGRES_PASSWORD or "",
+            host=self.PATIENTS_POSTGRES_SERVER,
+            port=self.PATIENTS_POSTGRES_PORT,
+            path=self.PATIENTS_POSTGRES_DB,
         )
 
     SMTP_TLS: bool = True

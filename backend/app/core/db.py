@@ -1,10 +1,38 @@
 from sqlmodel import Session, create_engine, select
+from sqlalchemy.types import TypeDecorator, String
+import uuid
 
 from app import crud
 from app.core.config import settings
-from app.models import User, UserCreate
+from app.models.user import User, UserCreate
 
+
+# Custom SQLAlchemy type for UUID
+class UUIDType(TypeDecorator):
+    """SQLAlchemy type for UUID."""
+    impl = String(36)
+    cache_ok = True
+
+    def process_bind_param(self, value, dialect):
+        if value is None:
+            return None
+        if isinstance(value, uuid.UUID):
+            return str(value)
+        return value
+
+    def process_result_value(self, value, dialect):
+        if value is None:
+            return None
+        return uuid.UUID(value)
+
+
+# Main application database engine
 engine = create_engine(str(settings.SQLALCHEMY_DATABASE_URI))
+
+# Patients database engine (if configured)
+patients_engine = None
+if settings.PATIENTS_DATABASE_URI:
+    patients_engine = create_engine(str(settings.PATIENTS_DATABASE_URI))
 
 
 # make sure all SQLModel models are imported (app.models) before initializing DB

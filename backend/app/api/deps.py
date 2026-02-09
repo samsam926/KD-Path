@@ -10,8 +10,8 @@ from sqlmodel import Session
 
 from app.core import security
 from app.core.config import settings
-from app.core.db import engine
-from app.models import TokenPayload, User
+from app.core.db import engine, patients_engine
+from app.models.user import TokenPayload, User
 
 reusable_oauth2 = OAuth2PasswordBearer(
     tokenUrl=f"{settings.API_V1_STR}/login/access-token"
@@ -19,11 +19,24 @@ reusable_oauth2 = OAuth2PasswordBearer(
 
 
 def get_db() -> Generator[Session, None, None]:
+    """Get session for main application database."""
     with Session(engine) as session:
         yield session
 
 
+def get_patients_db() -> Generator[Session, None, None]:
+    """Get session for patients database."""
+    if not patients_engine:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Patients database is not configured",
+        )
+    with Session(patients_engine) as session:
+        yield session
+
+
 SessionDep = Annotated[Session, Depends(get_db)]
+PatientsSessionDep = Annotated[Session, Depends(get_patients_db)]
 TokenDep = Annotated[str, Depends(reusable_oauth2)]
 
 
